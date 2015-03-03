@@ -27,10 +27,7 @@ function getSelectionText() {
     } else if (document.selection && document.selection.type != "Control") {
         text = document.selection.createRange().text;
     }
-	if(text!=""){
-	    //console.log(text);
-		return text;
-	}
+	return text;
 }
 
 $('*').mousedown(function(e) {
@@ -42,12 +39,9 @@ $('*').mousedown(function(e) {
 $('*').mouseup(function(e) {
 	if((oldMousePosX != e.pageX || oldMousePosY != e.pageY) || (window.getSelection || (document.selection && document.selection.type != "Control"))){
 		//getSelectionText();
-		if(gotText==0){
-			self.port.emit('show',
-			  [
-				getSelectionText()
-			  ]
-		   );
+		var text;
+		if(gotText==0 && (text=getSelectionText()) != ""){
+			self.port.emit('show',[text, oldMousePosX, oldMousePosY]);
 			gotText=1;
 		}
 	}

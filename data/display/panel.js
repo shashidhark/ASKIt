@@ -1,5 +1,7 @@
 
 self.on('message', function onMessage(text) {
-  	document.getElementById('mean').innerHTML=$(text).find('ul').html();
-	
+	if(text==0)
+		document.getElementById('mean').innerHTML="Sorry.. Meaning not found.";
+	else
+  		document.getElementById('mean').innerHTML=$(text).find('ul').html();
 });
