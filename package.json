@@ -1,0 +1,13 @@
+{
+  "name": "askit",
+  "title": "ASKIt",
+  "id": "jid1-AkNvXJYPZAO7og",
+  "description": "",
+  "author": "Shashidhar and Alwyn Edison Mendonca",
+  "contributors":"",
+  "license": "MPL 2.0",
+  "version": "0.1",
+  "homepage": "http://www.theaskdev.com",
+  "icon":"data/icon/green32.png",
+  "icon64":"data/icon/green64.png"
+}
