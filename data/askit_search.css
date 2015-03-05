@@ -5,10 +5,10 @@
   left: 0;
   width: 400px; 
   font-size: 11px;  
-  background-color: white;
-  color: #666;
+  background-color: #A7BEED;
+  color: #1D0101;
   font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", sans-serif ;
-  border:1px solid #4aaede ;
+  border:2px solid #2473E9 ;
   box-shadow: 0 0 20px #333;
  -webkit-box-shadow: 0 0 20px #333;
  -webkit-border-radius: 8px 8px 8px 8px ;
@@ -49,37 +49,37 @@
 	padding: 5px 0 0px 10px !important; 
 }
 
-#dic_bubble_synonyms a {
+#askit_bubble_synonyms a {
 	color : #000 !important;
 	text-decoration:none;
 }
 
-#dic_bubble_synonyms a:hover{
+#askit_bubble_synonyms a:hover{
 
 	text-decoration:underline;
 }
 
-.dic_dif{
+.askit_dif{
 	margin:5px 10px 0 0 !important;
 	/*line-height:15px;*/
 }
 
-#dic_bubble_dif{
+#askit_bubble_dif{
 	padding-left:10px !important;
 }
 
-.dic_dif div.itemCount{
+.askit_dif div.itemCount{
 	font-weight:bold !important;
 	float:left;
 	padding-right:5px !important;
 }
 
-.dic_dif div.item{
+.askit_dif div.item{
 	padding-bottom:5px !important;
 	padding-left:10px !important;
 }
 
-.dic_dif div.itemData{
+.askit_dif div.itemData{
 	padding-left:15px !important;
 }
 
@@ -91,7 +91,7 @@
 	padding:10px 10px 5px !important;
 }
 
-.dic_close_bubble{
+.askit_close_bubble{
 	padding:5px 5px 0 0 !important;
 	text-align:right;
 }
@@ -107,12 +107,12 @@
 	font-weight:normal;
 }
 
-div.dic-arrow-above {
+div.askit-arrow-above {
   width:0px; 
   height:0px; 
   border-left:20px solid transparent !important;
   border-right:20px solid transparent !important;
-  border-top:20px solid #4aaede !important;
+  border-top:20px solid #2473E9 !important;
   font-size:0px;
   line-height:0px; 
   position: absolute; 
@@ -120,12 +120,12 @@ div.dic-arrow-above {
   bottom: -20px;  
 }
 
-div.dic-bubble-arrow-above {
+div.askit-bubble-arrow-above {
   width:0px; 
   height:0px; 
   border-left:20px solid transparent !important;
   border-right:20px solid transparent !important;
-  border-top:20px solid #ffffff !important;
+  border-top:20px solid #2473E9 !important;
   font-size:0px;
   line-height:0px; 
   position: absolute; 
@@ -133,12 +133,12 @@ div.dic-bubble-arrow-above {
   bottom: -19px;
 }
 
-div.dic-arrow-below {
+div.askit-arrow-below {
   width:0px; 
   height:0px; 
   border-left:20px solid transparent !important;
   border-right:20px solid transparent !important;
-  border-bottom:20px solid #4aaede !important;
+  border-bottom:20px solid #2473E9 !important;
   font-size:0px;
   line-height:0px; 
   position: absolute; 
@@ -146,12 +146,12 @@ div.dic-arrow-below {
   top: -20px;  
 }
 
-div.dic-bubble-arrow-below {
+div.askit-bubble-arrow-below {
   width:0px; 
   height:0px; 
   border-left:20px solid transparent !important;
   border-right:20px solid transparent !important;
-  border-bottom:20px solid #ffffff !important;
+  border-bottom:20px solid #2473E9 !important;
   font-size:0px;
   line-height:0px; 
   position: absolute; 
@@ -167,7 +167,7 @@ div.dic-bubble-arrow-below {
 	font-style: italic;
 }
 
-.dic_dif div.itemData a{
+.askit_dif div.itemData a{
 	color:#000 !important;
 	text-decoration:none !important;
 }
