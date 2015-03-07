@@ -1,2 +1,2 @@
 # ASKIt
-Find Meaning
+A simple plugin which displays word meaning on the same page while reading. Install the plugin, click on the plugin icon to make it green and, when you read, double click on the word that you want to look up. Meanings will get displayed in a small notification window. The app fetches meanings from Google dictionary and Artha. Your computer must be connected to Internet for the plugin to work.
