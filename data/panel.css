@@ -1,0 +1,9 @@
+.panel {
+  padding			: 5px;
+  font-size			: 11px;  
+  background-color	: #A7BEED;
+  color				: #1D0101;
+  font-family		: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", sans-serif ;
+  border			: 1px solid #2473E9;
+  text-align		: left;
+}

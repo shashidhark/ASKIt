@@ -8,7 +8,7 @@ var speaker        	= '';
 var loading			= '';
 var askit_logo		= '';
 var askit_logo_icon	= '';
-var askit_close_btn	= '';	;
+var askit_close_btn	= '';
 var askit_more		= '';
 var selection 		= '';
 var synonyms		= '';
@@ -24,11 +24,11 @@ var linkToSearch	= 'https://www.google.com/?hl=en#hl=en&q=';
 var ourLink			= 'http://www.theaskdev.com';
 
 self.port.on("getImages", function (loading1, speaker1, askit_close_btn1, askit_more1, askit_logo1, askit_logo_icon1){ 
-    loading =  loading1;
-    speaker = speaker1;
+    loading 		=  loading1;
+    speaker 		= speaker1;
     askit_close_btn = askit_close_btn1;
-    askit_more = askit_more1;
-    askit_logo = askit_logo1;
+    askit_more 		= askit_more1;
+    askit_logo 		= askit_logo1;
     askit_logo_icon = askit_logo_icon1;
 });
 
@@ -36,9 +36,25 @@ var bubbleDOM = null;
 var defaultOptions = {};
     
 $(document).ready(function(){ 
+
+	self.port.on("offIt", function(){
+		$(document).unbind('dblclick');
+		console.log("DBLC removed");
+	});
+
+	self.port.on("onIt", function(){
+		$(document).bind('dblclick', function(e){
+			var target = (e && e.target) || (e && e.srcElement);        
+			if(isValidSelection(target)){
+				selectEventBind(e,'dblclick');
+			}
+		});
+		console.log("DBLC added");
+	});
+
     if($("div#askit_bubble").length == 0){
 		var element = document.body.firstElementChild;
-		bubbleDOM = $('<div id=askit_bubble class="selection_bubble fontSize13 noSelect" style="background-color: #A7BEED;z-index:9999; border: 2px solid #2473E9;fetching=false"></div>');
+		bubbleDOM 	= $('<div id=askit_bubble class="selection_bubble fontSize13 noSelect" style="background-color: #A7BEED;z-index:9999; border: 2px solid #2473E9;fetching=false"></div>');
 		//Modified askit_bubble -> askit_bubble
 		bubbleDOM.insertBefore(element);
 	}	
@@ -69,11 +85,6 @@ $(document).ready(function(){
 	});
 });
 
-self.port.on("sendDef", function(data){
-	//return $(data).find('ul').eq(0).text();
-	self.port.emit("takeDef", $(data).find('ul').eq(0).text());
-});
-
 function selectEventBind(e,selectedEvent){
     self.port.emit("getLocalStorage");    
     
@@ -83,11 +94,18 @@ function selectEventBind(e,selectedEvent){
 
     
     if((defaultOptions.use_popupdbclick && defaultOptions.use_popupdbclick.triggerValue) && e.type == 'dblclick'){
-        self.port.emit("pageInfo",selection); 
-        createhtml(e,refresh);
+        //self.port.emit("pageInfo",selection); 
+        //createhtml(e,refresh);
+        selection = trimmedSelection();
+        if(selection==-1)
+        {
+        	console.log("Space");
+        }else{
+        self.port.emit("pageInfo",selection);  
+		createhtml(e,refresh);}
 	}
 
-	if((defaultOptions.use_popupselect && defaultOptions.use_popupselect.triggerValue) && e.type == 'mouseup'){     
+	/*if((defaultOptions.use_popupselect && defaultOptions.use_popupselect.triggerValue) && e.type == 'mouseup'){     
 		selection = trimmedSelection();
         self.port.emit("pageInfo",selection);  
 		createhtml(e,refresh);
@@ -96,7 +114,7 @@ function selectEventBind(e,selectedEvent){
         selection = trimmedSelection();
         self.port.emit("pageInfo",selection);  
 		createhtml(e,refresh);	
-    }
+    }*/
 }
 
 function createhtml(e,refresh){    
@@ -154,7 +172,7 @@ function createhtml(e,refresh){
 			
 				if(pageY >= belowPageHeight-150 && defaultOptions.use_window == "below"){
 		    		defaultOptions.use_window 	= "above";
-					askit_arrow_css 				= "askit-arrow-above";
+					askit_arrow_css 			= "askit-arrow-above";
 					askit_bubble_arrow_css 		= "askit-bubble-arrow-above";
 		            arrowFlag 					= false;
 		            aboveFlag 					= true;
@@ -169,9 +187,9 @@ function createhtml(e,refresh){
 
 			if(defaultOptions.use_window == "below"){				
                 if (pageX > 76 && pageX < screenWidth) {
-                	wleft 			= pageX - 76;
-                    arrowLeftPos 	= "";
-                    arrowBlueLeftPost = "";
+                	wleft 				= pageX - 76;
+                    arrowLeftPos 		= "";
+                    arrowBlueLeftPost 	= "";
                     
                 } else if (pageX > screenWidth) {
                     arrowLeftPosition = pageX - screenWidth;
@@ -180,8 +198,8 @@ function createhtml(e,refresh){
                         arrowLeftPosition = arrowLeftPosition - 20;
                     }
                     
-                    arrowLeftPos = "left:" + arrowLeftPosition + "px";
-                    arrowBlueLeftPost = "left:" + arrowLeftPosition + "px";
+                    arrowLeftPos 		= "left:" + arrowLeftPosition + "px";
+                    arrowBlueLeftPost 	= "left:" + arrowLeftPosition + "px";
                     wleft = screenWidth;
                 } else {
                 	if (pageX > 30) {
@@ -226,8 +244,8 @@ function createhtml(e,refresh){
                         }
                     }
      
-                    arrowLeftPos = "left:" + arrowLeftPosition + "px";                    
-                    arrowBlueLeftPost = "left:" + arrowLeftPosition + "px";                    
+                    arrowLeftPos 		= "left:" + arrowLeftPosition + "px";                    
+                    arrowBlueLeftPost 	= "left:" + arrowLeftPosition + "px";                    
                     wleft = 10
                 }
                 if (pageY > 120) {                
@@ -239,11 +257,11 @@ function createhtml(e,refresh){
 			var loader = ' <img src="'+loading+'" style="padding:10px 0 15px 190px;"></img>';
 			if(!refresh){
 				$("div#askit_bubble").css({'top': wtop+'px','left': wleft+'px',
-					'backgroundColor':defaultOptions.use_color_style.bubbleColor,
-					'color':defaultOptions.use_color_style.fontColor,
-					'fontSize':defaultOptions.use_color_style.fontSize,
-					'fontFamily':defaultOptions.use_color_style.fontType,
-					'visibility': 'visible'});
+					'backgroundColor'	:defaultOptions.use_color_style.bubbleColor,
+					'color'				:defaultOptions.use_color_style.fontColor,
+					'fontSize'			:defaultOptions.use_color_style.fontSize,
+					'fontFamily'		:defaultOptions.use_color_style.fontType,
+					'visibility'		: 'visible'});
 			}
 			else{
 				$("div#askit_bubble").css('visibility', 'visible');
@@ -260,12 +278,19 @@ function createhtml(e,refresh){
 			var synonyms = '';             
 
 		self.port.emit("completeBubble",selection);	
-        self.port.on("completeRes",function(defValue){ 
+        self.port.on("completeRes",function(data){ 
             
-            //var defVal = JSON.parse(unescape(defValue));
-            console.log("In dictionary:"+defValue);
-            var defVal = defValue;           
-        
+            //console.log("In dictionary:"+data);
+            
+			if(data[1]){ //Wordnet
+				defVal = $(data[0]).find('ul').eq(0).text();
+			}
+			else{//Google
+				defVal =  $(data[0]).find('div.lr_dct_sf_sen.vk_txt').eq(0).find('span').eq(0).text();
+			}        
+			
+			defVal = defVal.substring(0,1).toUpperCase() + defVal.substring(1);
+		
             if(defVal != null && defVal.length > 0){ 
                 
                 var nounHtml = $('<div class="selection_bubble_content">'        							
@@ -273,10 +298,9 @@ function createhtml(e,refresh){
     									+ '		<img src="'+askit_close_btn+'" id="selection_bubble_close" align="right"></img>'
     									+ '</div>'
     									+ '<div id="askit_bubble_difinition">' 				
-    									+ '		<i class="selection_bubble_title">adjective</i>' 
     									+ '		<div id="askit_bubble_dif" class="askit_dif"></div>' 
     									+ '</div>' 
-    									+ ' <div id="askit_bubble_synonyms">'+defVal+'</div>' 
+    									+ '<div id="askit_bubble_synonyms">'+defVal+'</div>' 
     									+ '<div id="selection_bubble_more_action">'	
     									+ '		<span>'
     									+ '			<a href="'+linkToSearch+selection+'" target="_blank">'
@@ -346,7 +370,13 @@ function createhtml(e,refresh){
 					
 						var mainhref = '<a style="color:#12C;font-size:12px;" href="'+linkToSearch+'">results for ' + selection + '</a>';	
 
-						var suggestion =  "<div style='padding:10px;'>Meaning could not be found for '"+selection+"'.</div><div style='clear:both;padding:10px;' class='seeDefinition'>See " + mainhref + " on Google.com</div>";
+						var suggestion =  '';
+						if(selection=='0'){
+							suggestion = "<div style='padding:10px;'>Plase select one word.</div>";
+						}
+						else{
+							suggestion = "<div style='padding:10px;'>Meaning could not be found for '"+selection+"'.</div><div style='clear:both;padding:10px;' class='seeDefinition'>See " + mainhref + " on Google.com</div>";
+						}
 
 						$('#askit_bubble_difinition').html(suggestion);
 						
@@ -356,43 +386,6 @@ function createhtml(e,refresh){
 				 $('#selection_bubble_close').click(function(){
 					$("div#askit_bubble").css('visibility', 'hidden');
 				});
-                
-                $('.itemData a').unbind("click");
-
-    			 $('.itemData a').click(function(){
-
-							var popHref=$(this).attr("href");
-
-							var checkSpecialChar = popHref.indexOf("@");
-
-							if(checkSpecialChar != -1){
-
-								popHref = $(this).text();								
-								
-							}														
-							
-							self.port.emit("itemRedirectUrl",popHref);
-
-							return false;
-							
-						});	
-
-						$('.seeDefinition a').unbind("click");
-						
-						$('.seeDefinition a').click(function(){
-
-							var popHref=$(this).attr("href");
-
-						    self.port.emit("getReference",popHref);
-
-							return false;
-					 });
-                
-                    $('div#askit_bubble_dif div.item div.itemData').dblclick(function(e){
-    
-        				     createhtml(e, true);
-    				});
-        
         });
 			
     }
@@ -404,7 +397,7 @@ function createhtml(e,refresh){
 function isInsideBubble(currentTarget){     
     var valid = false;
     var current_element = currentTarget;
-	var askit_bubble = document.getElementById('askit_bubble');	
+	var askit_bubble 	= document.getElementById('askit_bubble');	
 	while(current_element && current_element != document.body) {
 		if (current_element == askit_bubble) {
 			valid = true;
@@ -418,7 +411,7 @@ function isInsideBubble(currentTarget){
 function isValidSelection(currentTarget){
 	var valid = true;
 	var current_element = currentTarget;
-	var askit_bubble = document.getElementById('askit_bubble');	
+	var askit_bubble 	= document.getElementById('askit_bubble');	
 	while(current_element && current_element != document.body) {
 		if (current_element == askit_bubble) {
 			valid = false;
@@ -438,7 +431,13 @@ function isValidSelection(currentTarget){
 
 function trimmedSelection() {
      var text = window.getSelection().toString();	
-	 return text.replace(/^\s+|\s+$/g, '');
+	 text = text.replace(/^\s+|\s+$/g, '');
+	 if(text.indexOf(' ')>0){
+	 	return '0';
+	 }
+	 else{
+	 	return text;
+	 }
 }
 
 function checkTrigger(keyTrigger, e) {
@@ -459,17 +458,15 @@ function checkTrigger(keyTrigger, e) {
 
 function checkDomain(){
     var checkDomain = false;
-	var siteDomain = document.domain;    
-	var index = siteDomain.indexOf('www');
+	var siteDomain 	= document.domain;    
+	var index 		= siteDomain.indexOf('www');
 	if(index != -1){
 		siteDomain = siteDomain.replace('www.','');	
 	}
     
     var ignoreDomain = {
-        'dictionary.reference.com' : 'Dictionary',
-	    'dictionary.com' : 'Dictionary',
-	    'thesaurus.com' :'thesaurus',
-	    'reference.com'	: 'reference'
+        'wordnetweb.princeton.edu' : 'Meaning',
+	    'google.com' : 'Dictionary'
     }
     if(ignoreDomain[siteDomain]){
         checkDomain = true
@@ -478,12 +475,9 @@ function checkDomain(){
 	return checkDomain;	
 }
 
-
+//Not used
 function trim(word) {
-	
     return word = word.replace(/[^a-zA-Z]+/g,'');	
-
-	//return word.replace(/^\s+|\s+$/g, '');
 }
 
 function escapeHTML(str){
