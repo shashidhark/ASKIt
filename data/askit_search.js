@@ -283,12 +283,13 @@ function createhtml(e,refresh){
             //console.log("In dictionary:"+data);
             var searchLink = data[2];
 			if(data[1]){ //Wordnet
-				defVal = getFromBraces($(data[0]).find('ul').eq(0).text());
+				defVal = extractDef($(data[0]).find('ul').eq(0).find('li').eq(0).text(), selection);
 			}
 			else{//Google
 				defVal =  $(data[0]).find('div.lr_dct_sf_sen.vk_txt').eq(0).find('span').eq(0).text();
 			}        
 			
+			console.log("Log value: "+defVal);
 			defVal = firstUC(defVal);//.substring(0,1).toUpperCase() + defVal.substring(1);
 		
             if(defVal != null && defVal.length > 0){ 
@@ -342,10 +343,11 @@ function createhtml(e,refresh){
 							+ '<div id="askit_bubble_difinition">'
 							+ '</div>' 
 							+ '<div id="selection_bubble_more_action">'
-							+ '     <span>&nbsp;</span>'
-							+ '      <a href="'+ourLink+'" target="_blank">'
-							+ '			<img style="position: relative;bottom: 5px;" src="'+ askit_logo +'" align="right" alt="ASK-DEV"></img>'
-							+ '		</a>'
+							+ '     <span>'
+    						+ '			<a href="'+searchLink+selection+'" target="_blank">'
+    						+ '				<img  src="'+ askit_more +'"  alt="Search link"></img>'
+    						+ '			</a>'
+    						+ '		</span>'
 							+ ' </div>'
 							+ '</div>'														
 							+ '<div class="'+askit_arrow_css+'" style="'+ arrowBlueLeftPost +'"></div>'
@@ -368,14 +370,14 @@ function createhtml(e,refresh){
                               });
                         }
 					
-						var mainhref = '<a style="color:#12C;font-size:12px;" href="'+searchLink+selection+'">results for ' + selection + '</a>';	
+						var mainhref = '<a style="color:#12C;font-size:12px;" target="_blank" href="'+searchLink+selection+'">results for ' + selection + '</a>';	
 
 						var suggestion =  '';
 						if(selection=='0'){
 							suggestion = "<div style='padding:10px;'>Plase select one word.</div>";
 						}
 						else{
-							suggestion = "<div style='padding:10px;'>Meaning could not be found for '"+selection+"'.</div><div style='clear:both;padding:10px;' class='seeDefinition'>See " + mainhref + " on Google.com</div>";
+							suggestion = "<div style='padding:10px;'>Meaning could not be found for '"+selection+"'.</div>";
 						}
 
 						$('#askit_bubble_difinition').html(suggestion);
@@ -480,17 +482,20 @@ function trim(word) {
     return word = word.replace(/[^a-zA-Z]+/g,'');	
 }
 
-//For WordNet
-function getFromBraces(str){
-	var found = Array(),  rxp = /\(([^)]+)\)/g, curMatch,i=0;
-	while( curMatch = rxp.exec( str ) ) {
-    	found.push( curMatch[1] );
+//For WordNet, Fetch Def
+function extractDef(str, sel){
+	var regex = /[^\(]*(\(.*\))[^\)]*/;
+    var i=str.indexOf(sel);
+
+	if(i!=-1){
+        str=str.substring(i);
 	}
-	
-	if(found[i]=="n")
-	{	i++;	}
-	
-	return found[i];
+
+    var res = str.match(regex);
+    if(res!=null)
+	    return res[1].substring(1, res[1].length-1);
+	else
+		return "";
 }
 
 //First letter upper
