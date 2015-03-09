@@ -20,7 +20,7 @@ var timer3			= 0 ;
 var errorTimer 		= 0;
 var refresh 		= false;
 var selectionText 	= '';
-var linkToSearch	= 'https://www.google.com/?hl=en#hl=en&q=';
+//var linkToSearch	= 'https://www.google.com/?hl=en#hl=en&q=';
 var ourLink			= 'http://www.theaskdev.com';
 
 self.port.on("getImages", function (loading1, speaker1, askit_close_btn1, askit_more1, askit_logo1, askit_logo_icon1){ 
@@ -54,7 +54,7 @@ $(document).ready(function(){
 
     if($("div#askit_bubble").length == 0){
 		var element = document.body.firstElementChild;
-		bubbleDOM 	= $('<div id=askit_bubble class="selection_bubble fontSize13 noSelect" style="background-color: #A7BEED;z-index:9999; border: 2px solid #2473E9;fetching=false"></div>');
+		bubbleDOM 	= $('<div id=askit_bubble class="selection_bubble fontSize13 noSelect" style="background-color: #F2AE02;z-index:9999; border: 2px solid #FFED7F;fetching=false"></div>');
 		//Modified askit_bubble -> askit_bubble
 		bubbleDOM.insertBefore(element);
 	}	
@@ -268,7 +268,7 @@ function createhtml(e,refresh){
 			}			
 
 			$("div#askit_bubble").html(loader);			
-			displayWord = selection;			
+			displayWord = firstUC(selection);
 			var apostrophy=selection.indexOf("'");
 			
 			if(apostrophy !=-1){
@@ -281,15 +281,15 @@ function createhtml(e,refresh){
         self.port.on("completeRes",function(data){ 
             
             //console.log("In dictionary:"+data);
-            
+            var searchLink = data[2];
 			if(data[1]){ //Wordnet
-				defVal = $(data[0]).find('ul').eq(0).text();
+				defVal = getFromBraces($(data[0]).find('ul').eq(0).text());
 			}
 			else{//Google
 				defVal =  $(data[0]).find('div.lr_dct_sf_sen.vk_txt').eq(0).find('span').eq(0).text();
 			}        
 			
-			defVal = defVal.substring(0,1).toUpperCase() + defVal.substring(1);
+			defVal = firstUC(defVal);//.substring(0,1).toUpperCase() + defVal.substring(1);
 		
             if(defVal != null && defVal.length > 0){ 
                 
@@ -303,8 +303,8 @@ function createhtml(e,refresh){
     									+ '<div id="askit_bubble_synonyms">'+defVal+'</div>' 
     									+ '<div id="selection_bubble_more_action">'	
     									+ '		<span>'
-    									+ '			<a href="'+linkToSearch+selection+'" target="_blank">'
-    									+ '				<img  src="'+ askit_more +'"  alt="Dictionary More"></img>'
+    									+ '			<a href="'+searchLink+selection+'" target="_blank">'
+    									+ '				<img  src="'+ askit_more +'"  alt="Search link"></img>'
     									+ '			</a>'
     									+ '		</span>'
     									+ '		<a href="'+ourLink+'" target="_blank">'
@@ -368,7 +368,7 @@ function createhtml(e,refresh){
                               });
                         }
 					
-						var mainhref = '<a style="color:#12C;font-size:12px;" href="'+linkToSearch+'">results for ' + selection + '</a>';	
+						var mainhref = '<a style="color:#12C;font-size:12px;" href="'+searchLink+selection+'">results for ' + selection + '</a>';	
 
 						var suggestion =  '';
 						if(selection=='0'){
@@ -478,6 +478,24 @@ function checkDomain(){
 //Not used
 function trim(word) {
     return word = word.replace(/[^a-zA-Z]+/g,'');	
+}
+
+//For WordNet
+function getFromBraces(str){
+	var found = Array(),  rxp = /\(([^)]+)\)/g, curMatch,i=0;
+	while( curMatch = rxp.exec( str ) ) {
+    	found.push( curMatch[1] );
+	}
+	
+	if(found[i]=="n")
+	{	i++;	}
+	
+	return found[i];
+}
+
+//First letter upper
+function firstUC(word){
+	return word.substring(0,1).toUpperCase() + word.substring(1);
 }
 
 function escapeHTML(str){
