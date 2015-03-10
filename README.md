@@ -32,6 +32,5 @@ ASKIt 0.1 Features
 Copyright 2014-2015 ASK-DEV.Inc.
 All Rights Reserved. 
 Released under the GPL license
---------------------------------------------------------------------------------
 Developed by 	: Shashidhar and Alwyn Edison Mendonca
 WebSite 		: http://www.theaskdev.com
