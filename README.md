@@ -29,6 +29,9 @@ ASKIt 0.1 Features
 2) Add-on icon changes its behavior while turning it off and on. 
 
 ------------------------------------------------------------------------------------------------------------------------------------
-Copyright 2014-2015 ASK-DEV.Inc. All Rights Reserved. Released under the GPL license
+Copyright 2014-2015 ASK-DEV.Inc.
+All Rights Reserved. 
+Released under the GPL license
+--------------------------------------------------------------------------------
 Developed by 	: Shashidhar and Alwyn Edison Mendonca
 WebSite 		: http://www.theaskdev.com
