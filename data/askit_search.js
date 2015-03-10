@@ -1,3 +1,13 @@
+/*
+|===============================================================================
+|		Last Modified Date 	: 10/03/2015
+|===============================================================================
+|		Copyright 2014-2015 ASK-DEV.Inc. All Rights Reserved. Released under the GPL license
+|		Developed by 	: Shashidhar and Alwyn Edison Mendonca
+|		WebSite 		: http://www.theaskdev.com
+|===============================================================================
+*/
+
 $ = jQuery.noConflict(true);
 
 /*(function ($) {
@@ -39,7 +49,7 @@ $(document).ready(function(){
 
 	self.port.on("offIt", function(){
 		$(document).unbind('dblclick');
-		console.log("DBLC removed");
+		//console.log("DBLC removed");
 	});
 
 	self.port.on("onIt", function(){
@@ -49,7 +59,7 @@ $(document).ready(function(){
 				selectEventBind(e,'dblclick');
 			}
 		});
-		console.log("DBLC added");
+		//console.log("DBLC added");
 	});
 
     if($("div#askit_bubble").length == 0){
@@ -99,7 +109,7 @@ function selectEventBind(e,selectedEvent){
         selection = trimmedSelection();
         if(selection==-1)
         {
-        	console.log("Space");
+        	//console.log("Space");
         }else{
         self.port.emit("pageInfo",selection);  
 		createhtml(e,refresh);}
@@ -253,7 +263,7 @@ function createhtml(e,refresh){
                 }
                 arrowColor = "border-top:20px solid " + defaultOptions.use_color_style.bubbleColor + "; " + arrowBlueLeftPost            
 			}			
-			console.log(arrowColor);
+			//console.log(arrowColor);
 			var loader = ' <img src="'+loading+'" style="padding:10px 0 15px 190px;"></img>';
 			if(!refresh){
 				$("div#askit_bubble").css({'top': wtop+'px','left': wleft+'px',
@@ -283,13 +293,14 @@ function createhtml(e,refresh){
             //console.log("In dictionary:"+data);
             var searchLink = data[2];
 			if(data[1]){ //Wordnet
+				//console.log("Def before extract: "+$(data[0]).find('ul').eq(0).find('li').eq(0).text()+" "+selection);
 				defVal = extractDef($(data[0]).find('ul').eq(0).find('li').eq(0).text(), selection);
 			}
 			else{//Google
 				defVal =  $(data[0]).find('div.lr_dct_sf_sen.vk_txt').eq(0).find('span').eq(0).text();
 			}        
 			
-			console.log("Log value: "+defVal);
+			//console.log("Log value: "+defVal);
 			defVal = firstUC(defVal);//.substring(0,1).toUpperCase() + defVal.substring(1);
 		
             if(defVal != null && defVal.length > 0){ 
@@ -348,6 +359,9 @@ function createhtml(e,refresh){
     						+ '				<img  src="'+ askit_more +'"  alt="Search link"></img>'
     						+ '			</a>'
     						+ '		</span>'
+    						+ '		<a href="'+ourLink+'" target="_blank">'
+    						+ '			<img style="position: relative;bottom: 5px;" src="'+ askit_logo +'" align="right" alt="ASK-DEV"></img>'
+    						+ '		</a>'
 							+ ' </div>'
 							+ '</div>'														
 							+ '<div class="'+askit_arrow_css+'" style="'+ arrowBlueLeftPost +'"></div>'
@@ -374,7 +388,7 @@ function createhtml(e,refresh){
 
 						var suggestion =  '';
 						if(selection=='0'){
-							suggestion = "<div style='padding:10px;'>Plase select one word.</div>";
+							suggestion = "<div style='padding:10px;'>Please select one word.</div>";
 						}
 						else{
 							suggestion = "<div style='padding:10px;'>Meaning could not be found for '"+selection+"'.</div>";
@@ -485,11 +499,13 @@ function trim(word) {
 //For WordNet, Fetch Def
 function extractDef(str, sel){
 	var regex = /[^\(]*(\(.*\))[^\)]*/;
-    var i=str.indexOf(sel);
-
+	
+	str=str.substring(7);
+	
+   /* var i=str.indexOf(sel);
 	if(i!=-1){
         str=str.substring(i);
-	}
+	}*/
 
     var res = str.match(regex);
     if(res!=null)

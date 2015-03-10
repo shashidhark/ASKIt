@@ -10,7 +10,7 @@ $(document).ready(function(){
 			self.port.emit("onIt");
 		else
 			self.port.emit("offIt");
-		console.log(this.checked);
+		//console.log(this.checked);
 	});
 	
 	$('#searchLink1').click(function() {
