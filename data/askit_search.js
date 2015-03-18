@@ -46,8 +46,7 @@ var bubbleDOM = null;
 var defaultOptions = {};
     
 $(document).ready(function(){ 
-
-	self.port.on("offIt", function(){
+	/*self.port.on("offIt", function(){
 		$(document).unbind('dblclick');
 		//console.log("DBLC removed");
 	});
@@ -60,7 +59,7 @@ $(document).ready(function(){
 			}
 		});
 		//console.log("DBLC added");
-	});
+	});*/
 
     if($("div#askit_bubble").length == 0){
 		var element = document.body.firstElementChild;
@@ -70,10 +69,26 @@ $(document).ready(function(){
 	}	
 	 
 	$(document).dblclick(function(e) {
-		var target = (e && e.target) || (e && e.srcElement);        
-		if(isValidSelection(target)){
-			selectEventBind(e,'dblclick');
-		}
+		
+		//console.log("ready..");
+		self.port.emit("getStat");
+		self.port.on("takeStat", function(x){
+			//console.log(x);
+			if(!x){
+				//console.log("def");
+				var target = (e && e.target) || (e && e.srcElement);        
+				if(isValidSelection(target)){
+					selectEventBind(e,'dblclick');
+				}
+			}
+			else{
+				//console.log("No def");
+				/*var target = (e && e.target) || (e && e.srcElement);        
+				if(isValidSelection(target)){
+					selectEventBind(e,'dblclick');
+				}*/
+			}			
+		});
 	});    
     
 	$(document).mouseup(function(event) {			
@@ -222,6 +237,7 @@ function createhtml(e,refresh){
                         }
                     }
                     arrowLeftPos 		= "left:" + arrowLeftPosition + "px";
+
                     arrowBlueLeftPost 	= "left:" + arrowLeftPosition + "px";                    
                     wleft = 10;
                 }
@@ -286,6 +302,31 @@ function createhtml(e,refresh){
 			}
 			
 			var synonyms = '';             
+		self.port.on("error",function(data){ 
+			//console.log("error no conenction");
+			var nounHtml = $('<div class="selection_bubble_content">'									
+									+ '<div class="selection_bubble_word" id="selection_bubble_word">'
+									+ '		<img src="'+askit_close_btn+'" id="selection_bubble_close" align="right"></img>'
+									+ '</div>'
+									+ '<div id="askit_bubble_difinition">'
+									+ '</div>' 
+									+ '<div id="selection_bubble_more_action">'
+									+ '		<a href="'+ourLink+'" target="_blank">'
+									+ '			<img style="position: relative;bottom: 5px;" src="'+ askit_logo +'" align="right" alt="ASK-DEV"></img>'
+									+ '		</a>'
+									+ ' </div>'
+									+ '</div>'
+									+ '<div class="'+askit_arrow_css+'" style="'+ arrowBlueLeftPost +'"></div>'
+									+ '<div class="'+askit_bubble_arrow_css+'" style="'+arrowColor+'"></div>');
+									
+			var suggestion="No internet connection.";
+			
+			$("div#askit_bubble").html(nounHtml); 
+			$('#askit_bubble_difinition').html(suggestion);
+			$('#selection_bubble_close').click(function(){
+				$("div#askit_bubble").css('visibility', 'hidden');
+			});
+		});
 
 		self.port.emit("completeBubble",selection);	
         self.port.on("completeRes",function(data){ 
@@ -397,6 +438,7 @@ function createhtml(e,refresh){
 						$('#askit_bubble_difinition').html(suggestion);
 						
 				}
+				
                 
                  $('#selection_bubble_close').unbind("click");    					 
 				 $('#selection_bubble_close').click(function(){
@@ -409,6 +451,8 @@ function createhtml(e,refresh){
     },20);
 	}
 }
+
+
 
 function isInsideBubble(currentTarget){     
     var valid = false;
