@@ -19,7 +19,6 @@ var loading			= '';
 var askit_logo		= '';
 var askit_logo_icon	= '';
 var askit_close_btn	= '';
-var askit_more		= '';
 var selection 		= '';
 var synonyms		= '';
 var displayWord 	= '';
@@ -37,7 +36,7 @@ self.port.on("getImages", function (loading1, speaker1, askit_close_btn1, askit_
     loading 		=  loading1;
     speaker 		= speaker1;
     askit_close_btn = askit_close_btn1;
-    askit_more 		= askit_more1;
+    //askit_more 		= askit_more1;
     askit_logo 		= askit_logo1;
     askit_logo_icon = askit_logo_icon1;
 });
@@ -46,21 +45,6 @@ var bubbleDOM = null;
 var defaultOptions = {};
     
 $(document).ready(function(){ 
-	/*self.port.on("offIt", function(){
-		$(document).unbind('dblclick');
-		//console.log("DBLC removed");
-	});
-
-	self.port.on("onIt", function(){
-		$(document).bind('dblclick', function(e){
-			var target = (e && e.target) || (e && e.srcElement);        
-			if(isValidSelection(target)){
-				selectEventBind(e,'dblclick');
-			}
-		});
-		//console.log("DBLC added");
-	});*/
-
     if($("div#askit_bubble").length == 0){
 		var element = document.body.firstElementChild;
 		bubbleDOM 	= $('<div id=askit_bubble class="selection_bubble fontSize13 noSelect" style="background-color: #F2AE02;z-index:9999; border: 2px solid #FFED7F;fetching=false"></div>');
@@ -80,14 +64,7 @@ $(document).ready(function(){
 				if(isValidSelection(target)){
 					selectEventBind(e,'dblclick');
 				}
-			}
-			else{
-				//console.log("No def");
-				/*var target = (e && e.target) || (e && e.srcElement);        
-				if(isValidSelection(target)){
-					selectEventBind(e,'dblclick');
-				}*/
-			}			
+			}	
 		});
 	});    
     
@@ -96,16 +73,12 @@ $(document).ready(function(){
         if (!isInsideBubble(target)) {
            selectEventBind(event, 'mouseup')
         }
-	});	
+	});
     
 	$(document).click(function(event) {
 		var target = (event && event.target) || (event && event.srcElement);//send selected word to main.js
-        if((!isInsideBubble(target) && selection.length == 0) && selection == ""){ 
+        if(!isInsideBubble(target) || selection.length == 0){ 
 		    $("div#askit_bubble").css('visibility', 'hidden');
-		}
-		else{
-		    selection = trimmedSelection();
-		    self.port.emit("pageInfo",selection); 
 		}
 	});
 });
@@ -122,24 +95,16 @@ function selectEventBind(e,selectedEvent){
         //self.port.emit("pageInfo",selection); 
         //createhtml(e,refresh);
         selection = trimmedSelection();
-        if(selection==-1)
+        //Call error displaying code----------------------------
+        if(selection=='0')
         {
-        	//console.log("Space");
+        	self.port.emit("onNull");  	
         }else{
-        self.port.emit("pageInfo",selection);  
-		createhtml(e,refresh);}
-	}
-
-	/*if((defaultOptions.use_popupselect && defaultOptions.use_popupselect.triggerValue) && e.type == 'mouseup'){     
-		selection = trimmedSelection();
-        self.port.emit("pageInfo",selection);  
+        	self.port.emit("pageInfo",selection);  
+        }
+        //------------------------------------------------------
 		createhtml(e,refresh);
 	}
-    else if(selectedEvent == 'mouseup'){
-        selection = trimmedSelection();
-        self.port.emit("pageInfo",selection);  
-		createhtml(e,refresh);	
-    }*/
 }
 
 function createhtml(e,refresh){    
@@ -159,11 +124,15 @@ function createhtml(e,refresh){
 		}
 
 		if(!showDefintion){
-			selection = trimmedSelection();			
+			selection = trimmedSelection();	
+			if(selection=='0')
+				self.port.emit("onNull");			
 			return;
 		}		
 
-		selection = trimmedSelection();		
+		selection = trimmedSelection();
+		if(selection=='0')
+			self.port.emit("onNull");		
 		
 		var pageX 	= e.pageX;
 		var pageY 	= e.pageY;
@@ -306,7 +275,7 @@ function createhtml(e,refresh){
 			//console.log("error no conenction");
 			var nounHtml = $('<div class="selection_bubble_content">'									
 									+ '<div class="selection_bubble_word" id="selection_bubble_word">'
-									+ '		<img src="'+askit_close_btn+'" id="selection_bubble_close" align="right"></img>'
+									+ '		<p id="selection_bubble_close" style="float:right">&times;</p>'
 									+ '</div>'
 									+ '<div id="askit_bubble_difinition">'
 									+ '</div>' 
@@ -319,7 +288,33 @@ function createhtml(e,refresh){
 									+ '<div class="'+askit_arrow_css+'" style="'+ arrowBlueLeftPost +'"></div>'
 									+ '<div class="'+askit_bubble_arrow_css+'" style="'+arrowColor+'"></div>');
 									
-			var suggestion="No internet connection.";
+			var suggestion="<div style='padding:10px;'>No internet connection.</div>";
+			
+			$("div#askit_bubble").html(nounHtml); 
+			$('#askit_bubble_difinition').html(suggestion);
+			$('#selection_bubble_close').click(function(){
+				$("div#askit_bubble").css('visibility', 'hidden');
+			});
+		});
+		
+		self.port.on("nullError",function(data){ 
+			//console.log("error no conenction");
+			var nounHtml = $('<div class="selection_bubble_content">'									
+									+ '<div class="selection_bubble_word" id="selection_bubble_word">'
+									+ '		<p id="selection_bubble_close" style="float:right">&times;</p>'
+									+ '</div>'
+									+ '<div id="askit_bubble_difinition">'
+									+ '</div>' 
+									+ '<div id="selection_bubble_more_action">'
+									+ '		<a href="'+ourLink+'" target="_blank">'
+									+ '			<img style="position: relative;bottom: 5px;" src="'+ askit_logo +'" align="right" alt="ASK-DEV"></img>'
+									+ '		</a>'
+									+ ' </div>'
+									+ '</div>'
+									+ '<div class="'+askit_arrow_css+'" style="'+ arrowBlueLeftPost +'"></div>'
+									+ '<div class="'+askit_bubble_arrow_css+'" style="'+arrowColor+'"></div>');
+									
+			var suggestion="<div style='padding:10px;'>Select one word.</div>";
 			
 			$("div#askit_bubble").html(nounHtml); 
 			$('#askit_bubble_difinition').html(suggestion);
@@ -348,7 +343,7 @@ function createhtml(e,refresh){
                 
                 var nounHtml = $('<div class="selection_bubble_content">'        							
     									+ '<div class="selection_bubble_word" id="selection_bubble_word">'
-    									+ '		<img src="'+askit_close_btn+'" id="selection_bubble_close" align="right"></img>'
+    									+ '		<p id="selection_bubble_close" style="float:right">&times;</p>'
     									+ '</div>'
     									+ '<div id="askit_bubble_difinition">' 				
     									+ '		<div id="askit_bubble_dif" class="askit_dif"></div>' 
@@ -356,8 +351,8 @@ function createhtml(e,refresh){
     									+ '<div id="askit_bubble_synonyms">'+defVal+'</div>' 
     									+ '<div id="selection_bubble_more_action">'	
     									+ '		<span>'
-    									+ '			<a href="'+searchLink+selection+'" target="_blank">'
-    									+ '				<img  src="'+ askit_more +'"  alt="Search link"></img>'
+    									+ '			<a href="'+searchLink+selection+'" target="_blank">More'
+    									//+ '				<!--img  src="'+ askit_more +'"  alt="Search link"></img-->'
     									+ '			</a>'
     									+ '		</span>'
     									+ '		<a href="'+ourLink+'" target="_blank">'
@@ -390,14 +385,14 @@ function createhtml(e,refresh){
                 else{    							  
 						var nounHtml = $('<div class="selection_bubble_content">'									
 							+ '<div class="selection_bubble_word" id="selection_bubble_word">'
-							+ '		<img src="'+askit_close_btn+'" id="selection_bubble_close" align="right"></img>'
+							+ '		<p id="selection_bubble_close" style="float:right">&times;</p>'
 							+ '</div>'
 							+ '<div id="askit_bubble_difinition">'
 							+ '</div>' 
 							+ '<div id="selection_bubble_more_action">'
 							+ '     <span>'
-    						+ '			<a href="'+searchLink+selection+'" target="_blank">'
-    						+ '				<img  src="'+ askit_more +'"  alt="Search link"></img>'
+    						//+ '			<a href="'+searchLink+selection+'" target="_blank">More'
+    						//+ '				<img  src="'+ askit_more +'"  alt="Search link"></img>'
     						+ '			</a>'
     						+ '		</span>'
     						+ '		<a href="'+ourLink+'" target="_blank">'
@@ -452,8 +447,6 @@ function createhtml(e,refresh){
 	}
 }
 
-
-
 function isInsideBubble(currentTarget){     
     var valid = false;
     var current_element = currentTarget;
@@ -488,11 +481,11 @@ function isValidSelection(currentTarget){
 	return valid;
 }
 
-
 function trimmedSelection() {
      var text = window.getSelection().toString();	
+     console.log("In trimmed: "+text);
 	 text = text.replace(/^\s+|\s+$/g, '');
-	 if(text.indexOf(' ')>0){
+	 if(text.indexOf(' ')!=-1){
 	 	return '0';
 	 }
 	 else{

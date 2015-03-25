@@ -12,19 +12,50 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<link href="css/bootstrap.css" rel="stylesheet">
+		<link href="css/bootstrap-responsive.css" rel="stylesheet">
+		<link href="css/sticky-footer.css" rel="stylesheet">
+		<link href="css/font-awesome.css" rel="stylesheet">
+		<script src="js/bootstrap.min.js"></script>		
 	</head>
-	<body>
-		<div class="panel" id="onoff">
-			<input type='checkbox' id='askitEnable' checked=checked/> On/Off
-		</div>
-		<div class="sep"></div>
-		<div class="panel">
-			<label><input type='radio' name='searchLink' id='searchLink1'  checked=checked/> Google</label><br />
-			<input type='radio' name='searchLink' id='searchLink2' /> Wordnet
-		</div>
-		<div class="sep"></div>
-		<div class="panel">
-			<input type='button' name='about' value='About' id='about' />
+	<body style="bgcolor:#777;">
+		<div class="navbar navbar-static-top">
+			<div class="navbar-inner">
+				<b class="brand" style="color:blue"><img src="icon/green32.png" width="24" height="24"/>ASKIt</b>
+				<div class="btn-group pull-right">					
+					<button id="onoff" class="btn btn-success"><i style="color:white" class="fa fa-power-off"></i></button>
+					<button id="set" class="btn btn-primary"><i style="color:white" id="gear" class="fa fa-cog fa-1x"></i></button>
+					<button id="info" class="btn btn-primary"><i style="color:white" class="fa fa-info-circle fa-1x"></i></button>
+				</div>
+			</div>		
+        	<div style="margin:20px" id="def">	
+        		<div class="input-append controls">
+    				<input class="span12" id="data" type="text">
+    				<button class="btn btn-primary" id="search" type="button"><b>ASKIt<i>!</i></b></button>
+    			</div>					
+				<div id="definition" class="heightScroll">
+					<i class="tipDetail"><u class="tip">Tip:</u> Select any word from webpage and click ASKIt addon icon on toolbar to view the meaning.</i>
+				</div>
+			</div>
+			<div style="margin:20px" id="setting">
+				<i class="tipDetail">Select a dictionary option.</i>
+				<label class="radio">
+					<input type='radio' name='searchLink' id='searchLink1'  checked=checked/> Google
+				</label>
+				<label class="radio">
+					<input type='radio' name='searchLink' id='searchLink2' /> WordNet
+				</label>
+			</div>
+			<div class="heightScrollAbout" id="about">
+				<div align="center">
+					<h4>ASKIt 0.1.1</h4><a id="version" href="#">Version info</a>&nbsp;&nbsp;<a id="guide" href="#">User Guide</a>
+				</div>
+				<div id="details" class="details"></div>
+			</div>
+		<footer class="footer">
+		    &nbsp;&nbsp;&nbsp;<font color='#777' size="2px">&copy; 2014-2015 ASK-DEV.Inc</font><div style="float:right;"><a target="_blank" href="http://www.theaskdev.com"><img src="ico/favicon.ico"/></a></div>&nbsp;
+		</footer>
+		
 		</div>
 	</body>
 </html>
