@@ -1,3 +1,13 @@
+/*
+|===============================================================================
+|		Last Modified Date 	: 26/03/2015
+|===============================================================================
+|		Copyright 2014-2015 ASK-DEV.Inc. All Rights Reserved. Released under the GPL license
+|		Developed by 	: Shashidhar and Alwyn Edison Mendonca
+|		WebSite 		: http://www.theaskdev.com
+|===============================================================================
+*/
+
 
 //For WordNet, Fetch Def
 
@@ -27,7 +37,7 @@ $(document).ready(function(){
 		//$("#data").val(sel);
 		self.port.emit("getSelectionFromTab");
 		self.port.on("takeSelectionFromTab", function(text){
-			if(text!=''){
+			if(text!='' && text != undefined){
 				$("#data").val(text);
 				$("#search").click();
 			}
@@ -83,7 +93,10 @@ $(document).ready(function(){
 					respData.find('div.vkc_np').remove();
 					respData.find('div.xpdxpnd').eq(respData.find('div.xpdxpnd').length-1).remove();
 					//lr_dct_sf_sen
-					$("#definition").html(removeAnchorTag(replaceNumber(respData.html())));
+					if(respData.html() != undefined)
+						$("#definition").html(removeAnchorTag(replaceNumber(respData.html())));
+					else 
+						$("#definition").html('Retry.');
 				}
 				else{
 					//self.port.emit("fetchDefWordNet", [$(text[0]).find('ul').eq(0).find('li').eq(0).text(), data]);

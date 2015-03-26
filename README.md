@@ -21,12 +21,22 @@ How to use ASKIt?
 3) Double-click on any word to view its meaning in a small pop-up bubble. In bubble "more" link is provided to visit the related website to check meaning.
 
 ------------------------------------------------------------------------------------------------------------------------------------
+Features
+========
+ASKIt 0.2
+---------
 
-ASKIt 0.1 Features
-==================
+    *NEW* Redesigned ASKIt panel.
+    *NEW* ASKIt panel provides option to search meaning in detail.
+    *NEW* Select the word to see the meaning in ASKIt panel.
+    *NEW* UI improvements to ASKIt bubble.
+    *FIXED* Many more bug fixes.
 
-1) ASKIt fetches meaning from Google and WordNet.
-2) Add-on icon changes its behavior while turning it off and on. 
+ASKIt 0.1
+---------
+
+	*NEW* ASKIt fetches meaning from Google and WordNet.
+    *NEW* Add-on icon changes its behavior while turning it off and on. 
 
 ------------------------------------------------------------------------------------------------------------------------------------
 Copyright 2014-2015 ASK-DEV.Inc.
