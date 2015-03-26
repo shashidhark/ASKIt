@@ -1,23 +1,12 @@
 
 //For WordNet, Fetch Def
-function extractDef(str){
-	/*var regex = /[^\(]*(\(.*\))[^\)]/;
-	
-	str=str.substring(7);
-	
-    var res = str.match(regex);
-    if(res!=null)
-	    return res[1].substring(1, res[1].length-1);
-	else
-		return "";*/
-	//console.log("Data: "+str);
-	var tree = $(str);
-	tree=tree.find('div.form').eq(0).html();
-	console.log($(tree).text());
-	$(tree).find('.key').remove();
-	$(tree).find('.pos').remove();
-	//return tree.html();
-	return tree;
+
+function replaceNumber(text){
+	return text.replace(/<strong>\d*<\/strong>./g, '');
+}
+
+function replaceWordNetChar(text){
+	return text.replace(/(S:)|(\(v\))|(\(n\))/g, '');
 }
 
 function removeAnchorTag(text){
@@ -35,6 +24,15 @@ $(document).ready(function(){
 	//$('#definition').hide();
 	//$('#definition').css({"max-height":"200px","overflow-y":"auto", "padding":"10px"});
 	self.port.on("panelLoad", function(){
+		//$("#data").val(sel);
+		self.port.emit("getSelectionFromTab");
+		self.port.on("takeSelectionFromTab", function(text){
+			if(text!=''){
+				$("#data").val(text);
+				$("#search").click();
+			}
+		});
+		
 		$('#setting').hide();
 		$('#about').hide();
 		$('#def').show();
@@ -80,17 +78,37 @@ $(document).ready(function(){
 			self.port.on("takeDefn", function(text){
 				$('#definition').css("border","1px solid #CCC");
 				if(text[1]==0){
-					//$("#definition").html(firstUC($(text[0]).find('div.lr_dct_ent').eq(0).find('span').eq(0).text()));
-					//text[0]=$(text[0]).attr('href', ''); //Remove href of anchor tag
-					//console.log(text[0]);
-					//console.log(removeAnchorTag($(text[0]).find('div.lr_container').eq(0).find('ol').eq(0).html()));
-					//$("#definition").html($(removeAnchorTag(text[0])).find('div.lr_container').eq(0).find('ol').eq(0).html());
-					$("#definition").html($(removeAnchorTag(text[0])).find('div.lr_container').eq(0).html());
+					var respData = $(text[0]).find('div.lr_container');
+					respData.find('div.lr_dct_ent_ph').remove();
+					respData.find('div.vkc_np').remove();
+					respData.find('div.xpdxpnd').eq(respData.find('div.xpdxpnd').length-1).remove();
+					//lr_dct_sf_sen
+					$("#definition").html(removeAnchorTag(replaceNumber(respData.html())));
 				}
 				else{
 					//self.port.emit("fetchDefWordNet", [$(text[0]).find('ul').eq(0).find('li').eq(0).text(), data]);
 					//console.log(text[0]);
-					$("#definition").html(extractDef(text[0]));	
+					var ulCount = $(text[0]).find('ul').length;
+					var h3Count = $(text[0]).find('h3').length;
+					text = removeAnchorTag(text[0]);
+					
+					if(h3Count == ulCount){
+						var count=0;
+						var text2="", ulTag;
+						while(count < h3Count){
+							//ulTag = ($(text[0]).find('ul').eq(count).html()).replace('S:', '');
+							text2 += "<h4>"+$(text).find('h3').eq(count).html()+"</h4>"+$(text).find('ul').eq(count).html();
+							count++;
+						}
+						text2 = replaceWordNetChar(text2);
+						$("#definition").html(text2);
+						//$("#definition").html($(text[0]).find('h3').eq(0).html()+$(text[0]).find('ul').eq(0).html()+$(text[0]).find('h3').eq(1).html()+$(text[0]).find('ul').eq(1).html());	
+					}
+					else{
+						var text2 = $(text).find('ul').eq(0).html()
+						text2 = replaceWordNetChar(text2);
+						$("#definition").html(text2);
+					}
 				}
 			});
 		}
@@ -136,10 +154,22 @@ $(document).ready(function(){
 					
 	$('#version').click(function() {
 		$('#details').html('<div class="well">\
+							<b>ASKIt 0.2</b>\
+                                                        <ol class="noType">\
+                                                                <li><span class="label label-success">NEW</span>  Redesigned ASKIt panel. </li>\
+                                                                <li><span class="label label-success">NEW</span> ASKIt panel provides option to search meaning in detail. </li>\
+                                                                <li><span class="label label-success">NEW</span>  Select the word to see the meaning in ASKIt panel. </li>\
+                                                                <li><span class="label label-success">NEW</span> UI improvements to ASKIt bubble. </li>\
+                                                                <li><span class="label label-warning">FIXED</span> Many more bug fixes. </li>\
+                                                        </ol>\
+							<b>ASKIt 0.1.1</b>\
+                                                        <ol class="noType">\
+                                                                <li><span class="label label-warning">FIXED</span> Add-on enabling and disabling(on/off) issue. </li>\
+                                                        </ol>\
 							<b>ASKIt 0.1</b>\
-							<ol>\
-								<li>ASKIt fetches meaning from Google and WordNet.\
-								<li>Add-on icon changes its behavior while turning it off and on. </li>\
+							<ol class="noType">\
+								<li><span class="label label-success">NEW</span> ASKIt fetches meaning from Google and WordNet.</li>\
+								<li><span class="label label-success">NEW</span> Add-on icon changes its behavior while turning it off and on. </li>\
 							</ol>\
 						</div>');
 					});

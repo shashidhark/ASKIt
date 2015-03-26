@@ -32,6 +32,10 @@ var selectionText 	= '';
 //var linkToSearch	= 'https://www.google.com/?hl=en#hl=en&q=';
 var ourLink			= 'http://www.theaskdev.com';
 
+self.port.on("getSelectionFromPage", function(){
+	self.port.emit("takeSelectionFromPage", trimmedSelection());
+});
+
 self.port.on("getImages", function (loading1, speaker1, askit_close_btn1, askit_more1, askit_logo1, askit_logo_icon1){ 
     loading 		=  loading1;
     speaker 		= speaker1;
@@ -249,7 +253,7 @@ function createhtml(e,refresh){
                 arrowColor = "border-top:20px solid " + defaultOptions.use_color_style.bubbleColor + "; " + arrowBlueLeftPost            
 			}			
 			//console.log(arrowColor);
-			var loader = ' <img src="'+loading+'" style="padding:10px 0 15px 190px;"></img>';
+			var loader = ' <img src="'+loading+'" style="padding:10px 0 15px 130px;"></img>';
 			if(!refresh){
 				$("div#askit_bubble").css({'top': wtop+'px','left': wleft+'px',
 					'backgroundColor'	:defaultOptions.use_color_style.bubbleColor,
@@ -398,6 +402,7 @@ function createhtml(e,refresh){
     						+ '		<a href="'+ourLink+'" target="_blank">'
     						+ '			<img style="position: relative;bottom: 5px;" src="'+ askit_logo +'" align="right" alt="ASK-DEV"></img>'
     						+ '		</a>'
+
 							+ ' </div>'
 							+ '</div>'														
 							+ '<div class="'+askit_arrow_css+'" style="'+ arrowBlueLeftPost +'"></div>'
