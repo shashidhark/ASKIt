@@ -113,6 +113,20 @@
 
 #selection_bubble_close{
 	cursor:pointer;
+	position:absolute;
+	top:0;
+	right:0;
+	width:16px;
+	height:16px;
+	background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAYUlEQVQYV12PwQ2AMAwD2w3YBEaAycsIsAkbgC+qowikeyCfHLe31l5xiUM8gm8RQ2x9hmuRECIUNwL2KSwhRCh2BFda4j9CTlbBtQi5ySfy5mzMTXWka3FyEwLPzJv/TR8o8xvGTnBWXwAAAABJRU5ErkJggg==');
+	background-position:center;
+	background-repeat:no-repeat;
+	cursor:pointer;
+	opacity:0.35;
+}
+
+#selection_bubble_close:hover{
+	opacity:0.8;
 }
 
 .selection_bubble_align_with_spearker {

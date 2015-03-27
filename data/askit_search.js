@@ -33,6 +33,7 @@ var selectionText 	= '';
 var ourLink			= 'http://www.theaskdev.com';
 
 self.port.on("getSelectionFromPage", function(){
+	//console.log("in ask js GetSelection trimmed");
 	self.port.emit("takeSelectionFromPage", trimmedSelection());
 });
 
@@ -47,44 +48,47 @@ self.port.on("getImages", function (loading1, speaker1, askit_close_btn1, askit_
 
 var bubbleDOM = null;
 var defaultOptions = {};
-    
+var evt;
+
+self.port.on("takeStat", function(x){
+	//console.log('take stat');
+	if(!x){
+		//console.log("def");
+		var target = (evt && evt.target) || (evt && evt.srcElement);        
+		if(isValidSelection(target)){
+			selectEventBind(evt,'dblclick');
+		}
+	}	
+});
+
+$(document).dblclick(function(e) {
+	evt=e;
+	//console.log("ready..");
+	//console.log('get stat');
+	self.port.emit("getStat");
+});
+
+$(document).mouseup(function(event) {			
+	var target = (event && event.target) || (event && event.srcElement);
+    if (!isInsideBubble(target)) {
+	    selectEventBind(event, 'mouseup')
+    }
+});
+  
+$(document).click(function(event) {
+	var target = (event && event.target) || (event && event.srcElement);//send selected word to main.js
+    if(!isInsideBubble(target) || selection.length == 0){ 
+	    $("div#askit_bubble").css('visibility', 'hidden');
+	}
+});
+	
 $(document).ready(function(){ 
-    if($("div#askit_bubble").length == 0){
+	if($("div#askit_bubble").length == 0){
 		var element = document.body.firstElementChild;
 		bubbleDOM 	= $('<div id=askit_bubble class="selection_bubble fontSize13 noSelect" style="background-color: #F2AE02;z-index:9999; border: 2px solid #FFED7F;fetching=false"></div>');
 		//Modified askit_bubble -> askit_bubble
 		bubbleDOM.insertBefore(element);
-	}	
-	 
-	$(document).dblclick(function(e) {
-		
-		//console.log("ready..");
-		self.port.emit("getStat");
-		self.port.on("takeStat", function(x){
-			//console.log(x);
-			if(!x){
-				//console.log("def");
-				var target = (e && e.target) || (e && e.srcElement);        
-				if(isValidSelection(target)){
-					selectEventBind(e,'dblclick');
-				}
-			}	
-		});
-	});    
-    
-	$(document).mouseup(function(event) {			
-		var target = (event && event.target) || (event && event.srcElement);
-        if (!isInsideBubble(target)) {
-           selectEventBind(event, 'mouseup')
-        }
-	});
-    
-	$(document).click(function(event) {
-		var target = (event && event.target) || (event && event.srcElement);//send selected word to main.js
-        if(!isInsideBubble(target) || selection.length == 0){ 
-		    $("div#askit_bubble").css('visibility', 'hidden');
-		}
-	});
+	}	    
 });
 
 function selectEventBind(e,selectedEvent){
@@ -127,7 +131,10 @@ function createhtml(e,refresh){
 			showDefintion = checkTrigger(defaultOptions.use_popupdbclick.triggerKey, e);		
 		}
 
+		
+        //console.log('createHtml');
 		if(!showDefintion){
+			//console.log('createHtm show def');
 			selection = trimmedSelection();	
 			if(selection=='0')
 				self.port.emit("onNull");			
@@ -279,7 +286,7 @@ function createhtml(e,refresh){
 			//console.log("error no conenction");
 			var nounHtml = $('<div class="selection_bubble_content">'									
 									+ '<div class="selection_bubble_word" id="selection_bubble_word">'
-									+ '		<p id="selection_bubble_close" style="float:right">&times;</p>'
+									+ '		<div id="selection_bubble_close" style="float:right"></div>'
 									+ '</div>'
 									+ '<div id="askit_bubble_difinition">'
 									+ '</div>' 
@@ -305,7 +312,7 @@ function createhtml(e,refresh){
 			//console.log("error no conenction");
 			var nounHtml = $('<div class="selection_bubble_content">'									
 									+ '<div class="selection_bubble_word" id="selection_bubble_word">'
-									+ '		<p id="selection_bubble_close" style="float:right">&times;</p>'
+									+ '		<p id="selection_bubble_close" style="float:right"></p>'
 									+ '</div>'
 									+ '<div id="askit_bubble_difinition">'
 									+ '</div>' 
@@ -347,7 +354,7 @@ function createhtml(e,refresh){
                 
                 var nounHtml = $('<div class="selection_bubble_content">'        							
     									+ '<div class="selection_bubble_word" id="selection_bubble_word">'
-    									+ '		<p id="selection_bubble_close" style="float:right">&times;</p>'
+    									+ '		<p id="selection_bubble_close" style="float:right"></p>'
     									+ '</div>'
     									+ '<div id="askit_bubble_difinition">' 				
     									+ '		<div id="askit_bubble_dif" class="askit_dif"></div>' 
@@ -389,7 +396,7 @@ function createhtml(e,refresh){
                 else{    							  
 						var nounHtml = $('<div class="selection_bubble_content">'									
 							+ '<div class="selection_bubble_word" id="selection_bubble_word">'
-							+ '		<p id="selection_bubble_close" style="float:right">&times;</p>'
+							+ '		<p id="selection_bubble_close" style="float:right"></p>'
 							+ '</div>'
 							+ '<div id="askit_bubble_difinition">'
 							+ '</div>' 
@@ -488,7 +495,7 @@ function isValidSelection(currentTarget){
 
 function trimmedSelection() {
      var text = window.getSelection().toString();	
-     console.log("In trimmed: "+text);
+     //console.log("In trimmed: "+text);
 	 text = text.replace(/^\s+|\s+$/g, '');
 	 if(text.indexOf(' ')!=-1){
 	 	return '0';

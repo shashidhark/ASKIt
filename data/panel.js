@@ -25,87 +25,81 @@ function firstUC(word){
 	return word.substring(0,1).toUpperCase() + word.substring(1);
 }
 
-function dispDef(){
-		var data = $("#data").val();
-		//$('#setting').hide();
-		//$('#about').hide();	
-		$('#definition').show();
-		if(data.length==0){
-			$('#definition').html("Please enter a word");
-		}
-		else{
-			$('#definition').css("border","0px solid #CCC");
-			$('#definition').html('<i style="color:blue" class="fa fa-circle-o-notch fa-spin fa-2x"></i>');
-			//console.log("hi");
-	
-			self.port.emit("findDefn", data);
-			self.port.on("takeDefn", function(text){
-				$('#definition').css("border","1px solid #CCC");
-				if(text[1]==0){
-					var respData = $(text[0]).find('div.lr_container');
-					respData.find('div.lr_dct_ent_ph').remove();
-					respData.find('div.vkc_np').remove();
-					respData.find('div.xpdxpnd').eq(respData.find('div.xpdxpnd').length-1).remove();
-					//lr_dct_sf_sen
-					if(respData.html() != undefined)
-						$("#definition").html(removeAnchorTag(replaceNumber(respData.html())));
+	self.port.on("takeDefn", function(text){
+			$('#definition').css("border","1px solid #CCC");
+			if(text[1]==0){
+				var respData = $(text[0]).find('div.lr_container');
+				respData.find('div.lr_dct_ent_ph').remove();
+				respData.find('div.vkc_np').remove();
+				respData.find('div.xpdxpnd').eq(respData.find('div.xpdxpnd').length-1).remove();
+				//lr_dct_sf_sen
+				
+					console.log("Def: Displayed..0");
+				if(respData.html() != undefined && respData.html() !="")
+					$("#definition").html(removeAnchorTag(replaceNumber(respData.html())));
+				else 
+					$("#definition").html("Explanation not found.");
+			}
+			else{
+				//self.port.emit("fetchDefWordNet", [$(text[0]).find('ul').eq(0).find('li').eq(0).text(), data]);
+				////console.log(text[0]);
+				var ulCount = $(text[0]).find('ul').length;
+				var h3Count = $(text[0]).find('h3').length;
+				text = removeAnchorTag(text[0]);
+			
+				if(h3Count == ulCount){
+					var count=0;
+					var text2="", ulTag;
+					while(count < h3Count){
+						//ulTag = ($(text[0]).find('ul').eq(count).html()).replace('S:', '');
+						text2 += "<h4>"+$(text).find('h3').eq(count).html()+"</h4>"+$(text).find('ul').eq(count).html();
+						count++;
+					}
+					text2 = replaceWordNetChar(text2);
+					//console.log("Def: Displayed..1");
+					if(text2=="")
+						$("#definition").html("Explanation not found.");
 					else 
-						$("#definition").html('Retry.');
+						$("#definition").html(text2);
+					//$("#definition").html($(text[0]).find('h3').eq(0).html()+$(text[0]).find('ul').eq(0).html()+$(text[0]).find('h3').eq(1).html()+$(text[0]).find('ul').eq(1).html());	
 				}
 				else{
-					//self.port.emit("fetchDefWordNet", [$(text[0]).find('ul').eq(0).find('li').eq(0).text(), data]);
-					//console.log(text[0]);
-					var ulCount = $(text[0]).find('ul').length;
-					var h3Count = $(text[0]).find('h3').length;
-					text = removeAnchorTag(text[0]);
-					
-					if(h3Count == ulCount){
-						var count=0;
-						var text2="", ulTag;
-						while(count < h3Count){
-							//ulTag = ($(text[0]).find('ul').eq(count).html()).replace('S:', '');
-							text2 += "<h4>"+$(text).find('h3').eq(count).html()+"</h4>"+$(text).find('ul').eq(count).html();
-							count++;
-						}
-						text2 = replaceWordNetChar(text2);
-						
-						if(text2=="")
-							$("#definition").html("Explanation not found.");
-						else 
-							$("#definition").html(text2);
-						//$("#definition").html($(text[0]).find('h3').eq(0).html()+$(text[0]).find('ul').eq(0).html()+$(text[0]).find('h3').eq(1).html()+$(text[0]).find('ul').eq(1).html());	
-					}
-					else{
-						var text2 = $(text).find('ul').eq(0).html()
-						text2 = replaceWordNetChar(text2);
-						$("#definition").html(text2);
-					}
+					var text2 = $(text).find('ul').eq(0).html()
+					text2 = replaceWordNetChar(text2);
+					//console.log("Def: Displayed..2");
+					$("#definition").html(text2);
 				}
-			});
-		}
-	}
-
-$(document).ready(function(){    
-	$('#setting').hide();
-	$('#about').hide();
-	//$('#definition').hide();
-	//$('#definition').css({"max-height":"200px","overflow-y":"auto", "padding":"10px"});
-	self.port.on("panelLoad", function(){
-		//$("#data").val(sel);
-		self.port.emit("getSelectionFromTab");
-		self.port.on("takeSelectionFromTab", function(text){
-			if(text!='' && text != undefined){
-				$("#data").val(text);
-				$("#search").click();
 			}
 		});
-		
-		$('#setting').hide();
-		$('#about').hide();
-		$('#def').show();
-	});
+
+function dispDef(){
+	//console.log("Starting dispDef function");
+	var data = $("#data").val();
+	//$('#setting').hide();
+	//$('#about').hide();	
+	$('#definition').show();
+	if(data.length==0){
+		$('#definition').html("Please enter a word");
+	}
+	else{
+		$('#definition').css("border","0px solid #CCC");
+		$('#definition').html('<i style="color:blue" class="fa fa-circle-o-notch fa-spin fa-2x"></i>');
+		////console.log("hi");
 	
-	$('#set').click(function(e) {
+		//console.log("Emit find def..");
+		self.port.emit("findDefn", data);
+	}
+}
+
+$('#search').click(function(e) {
+		//console.log("Clicked..");
+		dispDef();
+		self.port.on("error", function(text){
+			$("#definition").html("Check internet connection.");
+		});
+	});
+
+$('#set').click(function(e) {
 		e.preventDefault();
 		if($("#setting").is(":visible")){	
 			$("#setting").hide();
@@ -119,7 +113,31 @@ $(document).ready(function(){
 		}
 	});
 	
-	$("#set").hover(function(e){
+	self.port.on("takeSelectionFromTab", function(text){
+			//console.log("takeSelectionFromTab catched");
+			if(text!='' && text != undefined){
+				$("#data").val(text);
+				$("#search").click();
+			}
+		});
+self.port.on("panelLoad", function(){
+		console.log("Loading panel..");
+		self.port.emit("getSelectionFromTab");
+		
+		$('#setting').hide();
+		$('#about').hide();
+		$('#def').show();
+	});
+	
+$(document).ready(function(){    
+	$('#setting').hide();
+	$('#about').hide();
+	//$('#definition').hide();
+	//$('#definition').css({"max-height":"200px","overflow-y":"auto", "padding":"10px"});
+	
+});
+
+$("#set").hover(function(e){
 		$("#gear").attr("class","fa fa-cog fa-1x fa-spin");
 	});
 	
@@ -135,13 +153,6 @@ $(document).ready(function(){
 		}
 	 
 	});	
-			
-	$('#search').click(function(e) {
-		dispDef();
-		self.port.on("error", function(text){
-			$("#definition").html("Check internet connection.");
-		});
-	});
 	
 	$('#info').click(function() {
 		//self.port.emit("aboutOpen");
@@ -205,7 +216,7 @@ $(document).ready(function(){
 
 	$('#onoff').click(function() {
 		on=!on;
-		//console.log(on);
+		////console.log(on);
 		if(on){
 			self.port.emit("onIt");
 			$('#onoff').attr("class","btn btn-success");
@@ -214,42 +225,13 @@ $(document).ready(function(){
 			self.port.emit("offIt");
 			$('#onoff').attr("class","btn btn-danger");
 		}
-		//console.log(this.checked);
+		////console.log(this.checked);
 	});
 	
 	$('#searchLink1').click(function() {
-		self.port.emit("getLocalStorage");
-		var prefs_data = new Object;
-		prefs_data.use_popupdbclick 	= true;
-		prefs_data.triggerKeyDblClk 	='none';
-		prefs_data.use_popupselect		= false;
-		prefs_data.triggerKeyHighlight 	='none';        
-		prefs_data.defintion_selector 	= '1';
-		prefs_data.checkbox2 			= true;
-		prefs_data.use_window_above 	= false;
-		prefs_data.use_window_below 	= true;
-		prefs_data.fonttype_selector 	= 'Helvetica';
-		prefs_data.fontsize_selector 	= '10pt';
-		prefs_data.searchLink		 	= 0;
-		self.port.emit('save', prefs_data);
-		//console.log("google");
+		self.port.emit("set1");
 	});
 	
 	$('#searchLink2').click(function() {
-		self.port.emit("getLocalStorage");
-		var prefs_data = new Object;
-		prefs_data.use_popupdbclick 	= true;
-		prefs_data.triggerKeyDblClk 	='none';
-		prefs_data.use_popupselect		= false;
-		prefs_data.triggerKeyHighlight 	='none';        
-		prefs_data.defintion_selector 	= '1';
-		prefs_data.checkbox2 			= true;
-		prefs_data.use_window_above 	= false;
-		prefs_data.use_window_below 	= true;
-		prefs_data.fonttype_selector 	= 'Helvetica';
-		prefs_data.fontsize_selector 	= '10pt';
-		prefs_data.searchLink		 	= 1;
-		self.port.emit('save', prefs_data);
-		//console.log("wordnet");
+		self.port.emit("set2");
 	});
-});
