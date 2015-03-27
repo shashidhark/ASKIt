@@ -38,7 +38,7 @@ function firstUC(word){
 				if(respData.html() != undefined && respData.html() !="")
 					$("#definition").html(removeAnchorTag(replaceNumber(respData.html())));
 				else 
-					$("#definition").html("Explanation not found.");
+					$("#definition").html("Meaning could not be found.");
 			}
 			else{
 				//self.port.emit("fetchDefWordNet", [$(text[0]).find('ul').eq(0).find('li').eq(0).text(), data]);

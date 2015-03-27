@@ -376,18 +376,8 @@ function createhtml(e,refresh){
                 
                 
     
-								$("div#askit_bubble").html(nounHtml);                                
-                                $("div#askit_bubble").attr('fetching', false);                                
-                                var adjectiveCount 	= 1;
-    							var count 			= 0;
-								var dataEntries 	= defVal;
-								var selectionFound 	= false;
-								var foundDefintion 	= false;
-								var dataEntry 		= null;
+								$("div#askit_bubble").html(nounHtml);   
 
-    							if(!selectionFound){
-									 selectionFound = true;
-								}
 								$('<span style="font-weight:bold;padding-right:10px;"></span>').html(displayWord).appendTo('#selection_bubble_word');							 
 								
 								
