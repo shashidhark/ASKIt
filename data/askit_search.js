@@ -93,6 +93,7 @@ $(document).click(function(event) {
 });
 	
 $(document).ready(function(){ 
+		
 	if($("div#askit_bubble").length == 0){
 		var element = document.body.firstElementChild;
 		bubbleDOM 	= $('<div id=askit_bubble class="selection_bubble fontSize13 noSelect" style="background-color: #F2AE02;z-index:9999; border: 2px solid #FFED7F;fetching=false"></div>');
@@ -316,7 +317,7 @@ function createhtml(e,refresh){
     									+ '</div>'  
     									+ '<div id="selection_bubble_more_action">'	
     									+ ' </div>'
-    									+ '		<a href="'+ourLink+'" target="_blank">'
+    									+ '		<a id="ourlink" href="'+ourLink+'" target="_blank">'
     									+ '			<img style="position:absolute;bottom:0;right:0;" src="'+ askit_logo +'" align="right" alt="ASK-DEV" />'
     									+ '		</a>'
     									+ '</div>'														
@@ -328,10 +329,15 @@ function createhtml(e,refresh){
 	        	        	nounHtml = $(bubbleDesign);
     	    	        $("div#askit_bubble").html(nounHtml);
     	    	        //console.log("in disp"+displayWord);
-    	    	        $("div#askit_bubble_dif").html(defVal).append('&nbsp;&nbsp;<a class="moreSymbol" href="'+searchLink+selection+'" target="_blank">More</a>');
-						$('#Selword').show();							 
+    	    	        linkMore = searchLink+selection;
+    	    	        $("div#askit_bubble_dif").html(defVal).append('&nbsp;&nbsp;<a id="more" class="moreSymbol" href="'+searchLink+selection+'" target="_blank">More</a>');
+						$('#Selword').show();	
+						$('#ourlink').click(function(e){ e.preventDefault();self.port.emit("openTab", ourLink);});
+						$('#more').click(function(e){ e.preventDefault();self.port.emit("openTab", searchLink+selection);});				 
 						
 					self.port.emit("dispDone");
+					//self.port.emit("openTab", searchLink+selection);
+					//disbleAnchor();
 					self.port.emit("abortReq");
 				}
 							
@@ -345,7 +351,7 @@ function createhtml(e,refresh){
 					//
 					
     		});
-    		
+    		    		
     		self.port.on("notFound", function(){
     			
     				console.log("in not found");
@@ -359,14 +365,14 @@ function createhtml(e,refresh){
     									+ '</div>'  
     									+ '<div id="selection_bubble_more_action">'	
     									+ ' </div>'
-    									+ '		<a href="'+ourLink+'" target="_blank">'
+    									+ '		<a id="ourlink" href="'+ourLink+'" disabled>'
     									+ '			<img style="position:absolute;bottom:0;right:0;" src="'+ askit_logo +'" align="right" alt="ASK-DEV" />'
     									+ '		</a>'
     									+ '</div>'														
     									+ '<div class="'+askit_arrow_css+'" style="'+ arrowBlueLeftPost +'"></div>'
     									+ '<div class="'+askit_bubble_arrow_css+'" style="'+arrowColor+'"></div>';
 			
-			
+						$('#ourlink').click(function(e){ e.preventDefault();self.port.emit("openTab", ourLink);});
 						if($('#askit_bubble_difinition').length==0)
         	        		var nounHtml = $(bubbleDesign);
 						$("div#askit_bubble").html(nounHtml);
@@ -413,14 +419,14 @@ self.port.on("nullError",function(data){
 									+ '<div id="askit_bubble_difinition">'
 									+ '</div>' 
 									+ '<div id="selection_bubble_more_action">'
-									+ '		<a href="'+ourLink+'" target="_blank">'
+									+ '		<a  id="ourlink" href="'+ourLink+'" target="_blank">'
 									+ '			<img style="position:absolute;bottom:0;right:0;" src="'+ askit_logo +'" alt="ASK-DEV" />'
 									+ '		</a>'
 									+ ' </div>'
 									+ '</div>');
 									
 			var suggestion="<div style='padding:10px;'><i>Please select one word.</i></div>";
-			
+			$('#ourlink').click(function(e){ e.preventDefault();self.port.emit("openTab", ourLink);});
 			$("div#askit_bubble").html(nounHtml); 
 			$('#askit_bubble_difinition').html(suggestion);
 			$('#selection_bubble_close').click(function(){
@@ -437,7 +443,7 @@ self.port.on("error",function(data){
 									+ '<div id="askit_bubble_difinition">'
 									+ '</div>' 
 									+ '<div id="selection_bubble_more_action">'
-									+ '		<a href="'+ourLink+'" target="_blank">'
+									+ '		<a  id="ourlink" href="'+ourLink+'" target="_blank">'
 									+ '			<img style="position:absolute;bottom:0;right:0;" src="'+ askit_logo +'" alt="ASK-DEV"></img>'
 									+ '		</a>'
 									+ ' </div>'
@@ -448,7 +454,7 @@ self.port.on("error",function(data){
 				suggestion = "<div style='padding:10px;'>No internet connection.</div>";
 			else if(data==1)
 				suggestion = "<div style='padding:10px;'>It's taking too much time to load.</div>";
-			
+			$('#ourlink').click(function(e){ e.preventDefault();self.port.emit("openTab", ourLink);});
 			$("div#askit_bubble").html(nounHtml); 
 			$('#askit_bubble_difinition').html(suggestion);
 			$('#selection_bubble_close').click(function(){
