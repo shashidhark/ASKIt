@@ -22,8 +22,8 @@
   border:2px solid #2473E9 ;
   box-shadow: 0 0 20px #333;
  -webkit-box-shadow: 0 0 20px #333;
- -webkit-border-radius: 8px 8px 8px 8px ;
-  border-radius: 8px 8px 8px 8px ;
+ -webkit-border-radius: 5px 5px 5px 5px ;
+  border-radius: 5px 5px 5px 5px ;
   text-align:left;
 }
 
@@ -32,7 +32,7 @@
 }
 
 .selection_bubble_content{
-	padding:10px 5px !important;
+	padding:0px 0px !important;
 }
 
 .selection_bubble_title {
@@ -44,8 +44,8 @@
 
 .selection_bubble_word{
 	font-weight:bold;
-	font-size:18px;
-	padding:2px 5px 3px 10px !important;	
+	font-size:15px;
+	padding:2px 5px 1px 10px !important;	
 }
 
 .selection_bubble_synonyms{
@@ -57,11 +57,11 @@
 }
 
 #selection_bubble_defintion{
-	padding: 5px 0 0px 10px !important; 
+	padding: 0px 0 0px 10px !important; 
 }
 
 #askit_bubble_synonyms{
-	padding:2px 5px 3px 10px;
+	padding:0px 0px 0px 0px;
 }
 
 #askit_bubble_synonyms a {
@@ -218,6 +218,6 @@ div.noSelect {
   -khtml-user-select: none; /* webkit browsers */
 }
 
-
-
-
+.moreSymbol{
+	font-size:11px;
+}

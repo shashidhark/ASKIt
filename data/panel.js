@@ -8,6 +8,7 @@
 |===============================================================================
 */
 
+var d=true;
 function replaceNumber(text){
 	return text.replace(/<strong>\d*<\/strong>./g, '');
 }
@@ -24,53 +25,68 @@ function removeAnchorTag(text){
 function firstUC(word){
 	return word.substring(0,1).toUpperCase() + word.substring(1);
 }
-
-	self.port.on("takeDefn", function(text){
-			$('#definition').css("border","1px solid #CCC");
-			if(text[1]==0){
-				var respData = $(text[0]).find('div.lr_container');
-				respData.find('div.lr_dct_ent_ph').remove();
-				respData.find('div.vkc_np').remove();
-				respData.find('div.xpdxpnd').eq(respData.find('div.xpdxpnd').length-1).remove();
-				//lr_dct_sf_sen
-				
-					console.log("Def: Displayed..0");
-				if(respData.html() != undefined && respData.html() !="")
-					$("#definition").html(removeAnchorTag(replaceNumber(respData.html())));
-				else 
-					$("#definition").html("Meaning could not be found.");
+	
+self.port.on("takeDefn", function(text)
+{
+	if(((text[1]==1 && $(text[0]).find('ul').eq(0).find('li').length) || (text[1]==0 && $(text[0]).find('div.lr_dct_sf_sen.vk_txt').length)) && d==true)
+	{
+		d=false;
+		$('#definition').css("border","1px solid #CCC");
+		if(text[1]==0){
+			var respData = $(text[0]).find('div.lr_container');
+			respData.find('div.lr_dct_ent_ph').remove();
+			respData.find('div.vkc_np').remove();
+			respData.find('div.xpdxpnd').eq(respData.find('div.xpdxpnd').length-1).remove();
+			//lr_dct_sf_sen
+		
+			console.log("Def: Displayed..0");
+			if(respData.html() != undefined && respData.html() !="")
+				$("#definition").html(removeAnchorTag(replaceNumber(respData.html())));
+			else {
+				$('#definition').css("border","0px solid #CCC");
+				$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> Meaning could not be found.</div>");
 			}
-			else{
-				//self.port.emit("fetchDefWordNet", [$(text[0]).find('ul').eq(0).find('li').eq(0).text(), data]);
-				////console.log(text[0]);
-				var ulCount = $(text[0]).find('ul').length;
-				var h3Count = $(text[0]).find('h3').length;
-				text = removeAnchorTag(text[0]);
-			
-				if(h3Count == ulCount){
-					var count=0;
-					var text2="", ulTag;
-					while(count < h3Count){
+		}
+		else{
+			//self.port.emit("fetchDefWordNet", [$(text[0]).find('ul').eq(0).find('li').eq(0).text(), data]);
+			////console.log(text[0]);
+			var ulCount = $(text[0]).find('ul').length;
+			var h3Count = $(text[0]).find('h3').length;
+			text = removeAnchorTag(text[0]);
+		
+			if(h3Count == ulCount)
+			{
+				var count=0;
+				var text2="", ulTag;
+				while(count < h3Count)
+				{
 						//ulTag = ($(text[0]).find('ul').eq(count).html()).replace('S:', '');
-						text2 += "<h4>"+$(text).find('h3').eq(count).html()+"</h4>"+$(text).find('ul').eq(count).html();
-						count++;
-					}
-					text2 = replaceWordNetChar(text2);
-					//console.log("Def: Displayed..1");
-					if(text2=="")
-						$("#definition").html("Explanation not found.");
-					else 
-						$("#definition").html(text2);
-					//$("#definition").html($(text[0]).find('h3').eq(0).html()+$(text[0]).find('ul').eq(0).html()+$(text[0]).find('h3').eq(1).html()+$(text[0]).find('ul').eq(1).html());	
+					text2 += "<h4>"+$(text).find('h3').eq(count).html()+"</h4>"+$(text).find('ul').eq(count).html();
+					count++;
 				}
-				else{
-					var text2 = $(text).find('ul').eq(0).html()
-					text2 = replaceWordNetChar(text2);
-					//console.log("Def: Displayed..2");
+				text2 = replaceWordNetChar(text2);
+				//console.log("Def: Displayed..1");
+				if(text2=="")
+				{
+					$('#definition').css("border","0px solid #CCC");
+					$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> Meaning could not be found.</div>");
+				}
+				else 
 					$("#definition").html(text2);
-				}
+				//$("#definition").html($(text[0]).find('h3').eq(0).html()+$(text[0]).find('ul').eq(0).html()+$(text[0]).find('h3').eq(1).html()+$(text[0]).find('ul').eq(1).html());	
 			}
-		});
+			else
+			{
+				var text2 = $(text).find('ul').eq(0).html()
+				text2 = replaceWordNetChar(text2);
+				//console.log("Def: Displayed..2");
+				$("#definition").html(text2);
+			}
+		}
+		self.port.on("dispDone");
+		self.port.emit("abortReq");
+	}
+});
 
 function dispDef(){
 	//console.log("Starting dispDef function");
@@ -79,25 +95,31 @@ function dispDef(){
 	//$('#about').hide();	
 	$('#definition').show();
 	if(data.length==0){
-		$('#definition').html("Please enter a word");
+		$('#definition').html("<div class=\"alert\"><strong>Warning!</strong> Please enter a word</div>");
 	}
 	else{
 		$('#definition').css("border","0px solid #CCC");
 		$('#definition').html('<i style="color:blue" class="fa fa-circle-o-notch fa-spin fa-2x"></i>');
 		////console.log("hi");
-	
+		d=true;
 		//console.log("Emit find def..");
 		self.port.emit("findDefn", data);
 	}
 }
 
-$('#search').click(function(e) {
-		//console.log("Clicked..");
-		dispDef();
-		self.port.on("error", function(text){
-			$("#definition").html("Check internet connection.");
-		});
+$('#search').click(function(e) 
+{
+	//console.log("Clicked..");
+	dispDef();
+	self.port.on("error", function(text)
+	{
+		if(text==2)
+			$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> Check internet connection.</div>");
+		else{
+			$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> It's taking too much time to load.</div>");
+		}
 	});
+});
 
 $('#set').click(function(e) {
 		e.preventDefault();
@@ -112,17 +134,23 @@ $('#set').click(function(e) {
 			$("#about").hide();
 		}
 	});
+
+self.port.on("notFound", function(){
+	$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> Meaning could not be found.</div>");
+});
 	
-	self.port.on("takeSelectionFromTab", function(text){
-			//console.log("takeSelectionFromTab catched");
-			if(text!='' && text != undefined){
-				$("#data").val(text);
-				$("#search").click();
-			}
-		});
+self.port.on("takeSelectionFromTab", function(text){
+	//console.log("takeSelectionFromTab catched");
+	if(text!='' && text != undefined && text!=0){
+		$("#data").val(text);
+		$("#search").click();
+	}
+});
 self.port.on("panelLoad", function(){
 		console.log("Loading panel..");
+		d=true;
 		self.port.emit("getSelectionFromTab");
+		self.port.emit("closeBubble");
 		
 		$('#setting').hide();
 		$('#about').hide();
