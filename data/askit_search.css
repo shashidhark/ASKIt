@@ -221,3 +221,17 @@ div.noSelect {
 .moreSymbol{
 	font-size:11px;
 }
+
+.ourlink{
+	cursor:pointer;
+	position:absolute;
+	bottom:0;
+	right:0;
+	width:16px;
+	height:16px;
+	background-position:center;
+	background-repeat:no-repeat;
+}
+
+#ourlink:hover{
+}
