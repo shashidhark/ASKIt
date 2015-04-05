@@ -220,6 +220,7 @@ function createhtml(e,refresh){
                     wleft = 10;
                 }
 
+
                 wtop = abovePageHeight+arrowBottomCoo+20;                
                 arrowColor = "border-bottom:20px solid " + defaultOptions.use_color_style.bubbleColor + "; " + arrowBlueLeftPost
 			}

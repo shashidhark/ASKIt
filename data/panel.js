@@ -224,18 +224,22 @@ $("#set").hover(function(e){
 					
 	$('#version').click(function() {
 		$('#details').html('<div class="well">\
+							<b>ASKIt 0.2.1</b>\
+								<ol class="noType">\
+                            		<li><span class="label label-success">NEW</span> Version goes here</li>\
+                            	</ol>\
 							<b>ASKIt 0.2</b>\
-                                                        <ol class="noType">\
-                                                                <li><span class="label label-success">NEW</span>  Redesigned ASKIt panel. </li>\
-                                                                <li><span class="label label-success">NEW</span> ASKIt panel provides option to search meaning in detail. </li>\
-                                                                <li><span class="label label-success">NEW</span>  Select the word to see the meaning in ASKIt panel. </li>\
-                                                                <li><span class="label label-success">NEW</span> UI improvements to ASKIt bubble. </li>\
-                                                                <li><span class="label label-warning">FIXED</span> Many more bug fixes. </li>\
-                                                        </ol>\
+                                <ol class="noType">\
+                                	<li><span class="label label-success">NEW</span>  Redesigned ASKIt panel. </li>\
+                                    <li><span class="label label-success">NEW</span> ASKIt panel provides option to search meaning in detail. </li>\
+                                    <li><span class="label label-success">NEW</span>  Select the word to see the meaning in ASKIt panel. </li>\
+                                    <li><span class="label label-success">NEW</span> UI improvements to ASKIt bubble. </li>\
+                                   	<li><span class="label label-warning">FIXED</span> Many more bug fixes. </li>\
+                                </ol>\
 							<b>ASKIt 0.1.1</b>\
-                                                        <ol class="noType">\
-                                                                <li><span class="label label-warning">FIXED</span> Add-on enabling and disabling(on/off) issue. </li>\
-                                                        </ol>\
+                                <ol class="noType">\
+                                    <li><span class="label label-warning">FIXED</span> Add-on enabling and disabling(on/off) issue. </li>\
+                                </ol>\
 							<b>ASKIt 0.1</b>\
 							<ol class="noType">\
 								<li><span class="label label-success">NEW</span> ASKIt fetches meaning from Google and WordNet.</li>\
