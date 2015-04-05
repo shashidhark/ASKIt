@@ -136,7 +136,7 @@
 	font-weight:normal;
 }
 
-div.askit-arrow-above {
+div.askit-arrow_above {
   width:0px; 
   height:0px; 
   border-left:20px solid transparent !important;
@@ -149,7 +149,7 @@ div.askit-arrow-above {
   bottom: -20px;  
 }
 
-div.askit-bubble-arrow-above {
+div.askit-bubble-arrow_above {
   width:0px; 
   height:0px; 
   border-left:20px solid transparent !important;
@@ -162,7 +162,7 @@ div.askit-bubble-arrow-above {
   bottom: -19px;
 }
 
-div.askit-arrow-below {
+div.askit-arrow_below {
   width:0px; 
   height:0px; 
   border-left:20px solid transparent !important;
@@ -175,7 +175,7 @@ div.askit-arrow-below {
   top: -20px;  
 }
 
-div.askit-bubble-arrow-below {
+div.askit-bubble-arrow_below {
   width:0px; 
   height:0px; 
   border-left:20px solid transparent !important;

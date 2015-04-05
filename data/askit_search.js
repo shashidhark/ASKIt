@@ -24,23 +24,32 @@ var synonyms		= '';
 var displayWord 	= '';
 var timer1 			= 0 ;
 var defineWord 		= '';
-var timer2 			= 0 ;
+var timer2 			= 1 ;
 var timer3			= 0 ;
 var errorTimer 		= 0;
 var refresh 		= false;
 var selectionText 	= '';
+var arrowTopCoo  	= 0;
+var arrowLeftCoo  	= 0;
+var arrowRightCoo  	= 0;
+var arrowBottomCoo  = 0;
 //var linkToSearch	= 'https://www.google.com/?hl=en#hl=en&q=';
 var ourLink			= 'http://www.theaskdev.com';
-
-
+/*
+$(document).mousemove(function(event){ 
+        console.log("X: " + event.pageX + ", Y: " + event.pageY); 
+    });
+*/
 self.port.on("closeBubble2", function(){
+	//console.log("hello");
 	$("div#askit_bubble").css('visibility', 'hidden');
-});
-
-self.port.on("getSelectionFromPage", function(){
-	//console.log("in ask js GetSelection trimmed");
 	self.port.emit("takeSelectionFromPage", trimmedSelection());
 });
+
+//self.port.on("getSelectionFromPage", function(){
+	//console.log("in ask js GetSelection trimmed");
+	//self.port.emit("takeSelectionFromPage", trimmedSelection());
+//});
 
 self.port.on("getImages", function (loading1, speaker1, askit_close_btn1, askit_more1, askit_logo1, askit_logo_icon1){ 
     loading 		=  loading1;
@@ -68,7 +77,7 @@ self.port.on("takeStat", function(x){
 
 $(document).dblclick(function(e) {
 	evt=e;
-	//console.log("ready..");
+	console.log(evt.pageX+" "+evt.pageY);
 	//console.log('get stat');
 	self.port.emit("getStat");
 });
@@ -115,6 +124,8 @@ function selectEventBind(e,selectedEvent){
 	}
 }
 
+var prevHeight;
+
 function createhtml(e,refresh){    
 	if(checkDomain()){
 		return;
@@ -134,19 +145,20 @@ function createhtml(e,refresh){
 		
         //console.log('createHtml');
 		if(!showDefintion){
+			
 			//console.log('createHtm show def');
-			/*selection = trimmedSelection();	
-			if(selection=='0')
+			selection = trimmedSelection();	
+			/*if(selection=='0')
 				self.port.emit("onNull1");			*/
 			return;
 		}		
-
-		selection = trimmedSelection();
+		//clearTimeout();
+	//		selection = trimmedSelection();
 		//if(selection=='0')
 			//self.port.emit("onNull1");		
 		
-		var pageX 	= e.pageX;
-		var pageY 	= e.pageY;
+		var pageX 	= evt.pageX;
+		var pageY 	= evt.pageY;
 		var target 	= (e && e.target) || (event && event.srcElement);     
      	
      	$("div#askit_bubble").attr('fetching', false); 
@@ -161,8 +173,8 @@ function createhtml(e,refresh){
         			return;
 				}
 				$("div#askit_bubble").attr('fetching', 'true');			
-				var askit_arrow_css 		= "askit-arrow-" + defaultOptions.use_window;
-				var askit_bubble_arrow_css 	= "askit-bubble-arrow-" + defaultOptions.use_window;	
+				var askit_arrow_css 		= "askit-arrow_" + defaultOptions.use_window;
+				var askit_bubble_arrow_css 	= "askit-bubble-arrow_" + defaultOptions.use_window;	
 				var wleft 					= pageX;
 				var wtop 					= pageY;
 				var arrowColor 				= '';
@@ -177,15 +189,16 @@ function createhtml(e,refresh){
 			
 				if(pageY >= belowPageHeight-150 && defaultOptions.use_window == "below"){
 		    		defaultOptions.use_window 	= "above";
-					askit_arrow_css 			= "askit-arrow-above";
-					askit_bubble_arrow_css 		= "askit-bubble-arrow-above";
+					askit_arrow_css 			= "askit-arrow_above";
+					askit_bubble_arrow_css 		= "askit-bubble-arrow_above";
 		            arrowFlag 					= false;
 		            aboveFlag 					= true;
+		            arrowLeftPosition			= arrowLeftCoo;
 				}
 				else if(pageY <= abovePageHeight+150 && defaultOptions.use_window =="above"){
 					defaultOptions.use_window 	= "below";
-					askit_arrow_css 			= "askit-arrow-below";
-					askit_bubble_arrow_css 		= "askit-bubble-arrow-below";
+					askit_arrow_css 			= "askit-arrow_below";
+					askit_bubble_arrow_css 		= "askit-bubble-arrow_below";
 		            arrowFlag 					= false;
 		            belowFlag 					= true; 
 				}
@@ -208,9 +221,9 @@ function createhtml(e,refresh){
                     wleft = screenWidth;
                 } else {
                 	if (pageX > 30) {
-                    	arrowLeftPosition = pageX - 30;
+                    	arrowLeftPosition = arrowLeftCoo;//pageX - 30;
                     } else {
-                        arrowLeftPosition = pageX;
+                        arrowLeftPosition = arrowLeftCoo;//pageX;
                     
                         if (arrowLeftPosition == 0) {
                     		arrowLeftPosition = 10;
@@ -221,7 +234,7 @@ function createhtml(e,refresh){
                     arrowBlueLeftPost 	= "left:" + arrowLeftPosition + "px";                    
                     wleft = 10;
                 }
-                wtop = pageY + 30;                
+                wtop = abovePageHeight+arrowBottomCoo+20;                
                 arrowColor = "border-bottom:20px solid " + defaultOptions.use_color_style.bubbleColor + "; " + arrowBlueLeftPost
 			}
 			else if(defaultOptions.use_window == "above"){                                     
@@ -234,7 +247,7 @@ function createhtml(e,refresh){
                 
                     arrowLeftPosition = pageX - screenWidth;                      
                     if (pageX > 20) {                    
-                        arrowLeftPosition = arrowLeftPosition - 20;
+                        arrowLeftPosition = arrowLeftCoo;
                     }
                     
                     arrowLeftPos = "left:" + arrowLeftPosition + "px";                    
@@ -242,7 +255,7 @@ function createhtml(e,refresh){
                     wleft = screenWidth;                    
                 } else {     
                     if (pageX > 30) {                    
-                        arrowLeftPosition = pageX - 30;                       
+                        arrowLeftPosition = arrowLeftCoo; //pageX - 30;                       
                     } else {
                         arrowLeftPosition = pageX;                        
                         if (arrowLeftPosition == 0) {                        
@@ -252,15 +265,19 @@ function createhtml(e,refresh){
      
                     arrowLeftPos 		= "left:" + arrowLeftPosition + "px";                    
                     arrowBlueLeftPost 	= "left:" + arrowLeftPosition + "px";                    
-                    wleft = 10
+                    wleft = 10;
                 }
-                if (pageY > 120) {                
-                    wtop = pageY - 120;
+                if (pageY > 66) { //was 120               
+                    //wtop = pageY-65; //was 120
+                    wtop = abovePageHeight+arrowTopCoo-66;
                 }
+                
                 arrowColor = "border-top:20px solid " + defaultOptions.use_color_style.bubbleColor + "; " + arrowBlueLeftPost            
 			}			
-			//console.log(arrowColor);
-			var loader = '<div style=\'padding:10px;\'>Searching ....</div>';
+			//console.log(arrowTopCoo+" "+arrowLeftCoo+" "+wtop+" "+wleft);
+			var loader = '<div id="searchDiv" style=\'padding:10px;\'>Searching ....</div>';
+			loader+='<div class="'+askit_arrow_css+'" style="'+ arrowBlueLeftPost +'"></div><div class="'+askit_bubble_arrow_css+'" style="'+arrowColor+'"></div>';
+			
 			if(!refresh){
 				$("div#askit_bubble").css({'top': wtop+'px','left': wleft+'px',
 					'backgroundColor'	:defaultOptions.use_color_style.bubbleColor,
@@ -280,6 +297,9 @@ function createhtml(e,refresh){
 			if(apostrophy !=-1){
 				selection = selection.substring(0,apostrophy);
 			}
+			
+			prevHeight=$("div#askit_bubble").height();
+			console.log("Search"+prevHeight);
 			
 			var synonyms = '';             
 		self.port.on("error",function(data){ 
@@ -306,9 +326,37 @@ function createhtml(e,refresh){
 			$('#selection_bubble_close').click(function(){
 				$("div#askit_bubble").css('visibility', 'hidden');
 			});
+			
+			if(defaultOptions.use_window=='above'){
+				var hn = $('div#askit_bubble').height()-prevHeight;
+				console.log(prevHeight+" "+$('div#askit_bubble').height()+" "+hn);
+				$("div#askit_bubble").css({'top': wtop-hn+'px','left': wleft+'px'});
+			} 
 		});
 			
+		self.port.on("nullError",function(data){ 
+			var errorHtml = $('<div class="selection_bubble_content">'									
+							+ '<div id="selection_bubble_close"></div>'
+							+ '<div id="askit_bubble_difinition">'
+							+ '</div>' 
+							+ '		<a href="'+ourLink+'" target="_blank">'
+							+ '			<img class="ourlink" src="'+ askit_logo +'" alt="ASK-DEV"></img>'
+							+ '		</a>'
+							+ '</div>'
+							+ '<div class="'+askit_arrow_css+'" style="'+ arrowBlueLeftPost +'"></div>'
+							+ '<div class="'+askit_bubble_arrow_css+'" style="'+arrowColor+'"></div>');
+									
+			var suggestion="<div style='padding:10px;'>Please select one word.</div>";
+		
+			$("div#askit_bubble").html(errorHtml); 
+			$('#askit_bubble_difinition').html(suggestion);
+			$('#selection_bubble_close').click(function(){
+				$("div#askit_bubble").css('visibility', 'hidden');
+			});
+		});
+		
 		self.port.emit("completeBubble",selection);	
+			
         self.port.on("completeRes",function(data){ 
             
             //console.log("In dictionary:"+data);
@@ -325,8 +373,8 @@ function createhtml(e,refresh){
 			defVal = firstUC(defVal);//.substring(0,1).toUpperCase() + defVal.substring(1);
 		
             if(defVal != null && defVal.length > 0){ 
-                
-                var nounHtml = $('<div class="selection_bubble_content">'        							
+                //newDisplay=0;
+                var nounHtml = $('<div class="selection_bubble_content" id="mainDiv">'        							
     									+ '<div class="selection_bubble_word" id="selection_bubble_word">'
     									+ '		<p id="selection_bubble_close" style="float:right"></p>'
     									+ '</div>'
@@ -353,9 +401,11 @@ function createhtml(e,refresh){
 								$("div#askit_bubble").html(nounHtml);   
 								$("div#askit_bubble_dif").html(defVal).append('&nbsp;&nbsp;<a id="more" class="moreSymbol" href="'+searchLink+selection+'" target="_blank">More</a>');
 								$('<span style="font-weight:bold;padding-right:10px;"></span>').html(displayWord).appendTo('#selection_bubble_word');							 
-								
-								
-                                    
+								if(defaultOptions.use_window=='above'){
+									var hn = $('div#askit_bubble').height()-prevHeight;
+									console.log(prevHeight+" "+$('div#askit_bubble').height()+" "+hn);
+									$("div#askit_bubble").css({'top': wtop-hn+'px','left': wleft+'px'});
+								}    
                 }
                 else{    							  
 						var nounHtml = $('<div class="selection_bubble_content">'									
@@ -383,7 +433,7 @@ function createhtml(e,refresh){
 
 						$("div#askit_bubble").attr('fetching', false);                        
                         
-                        if (defaultOptions.use_window == "above" && !belowFlag) {
+                        /*if (defaultOptions.use_window == "above" && !belowFlag) {
                              wtop = pageY - 156;         
                              $("div#askit_bubble").css({
                                'top': wtop + 'px'
@@ -394,7 +444,7 @@ function createhtml(e,refresh){
                              $("div#askit_bubble").css({
                                'top': wtop + 'px'
                               });
-                        }
+                        }*/
 					
 						var mainhref = '<a style="color:#12C;font-size:12px;" target="_blank" href="'+searchLink+selection+'">results for ' + selection + '</a>';	
 
@@ -415,6 +465,11 @@ function createhtml(e,refresh){
 				 $('#selection_bubble_close').click(function(){
 					$("div#askit_bubble").css('visibility', 'hidden');
 				});
+				if(defaultOptions.use_window=='above'){
+					var hn = $('div#askit_bubble').height()-prevHeight;
+					console.log(prevHeight+" "+$('div#askit_bubble').height()+" "+hn);
+					$("div#askit_bubble").css({'top': wtop-hn+'px','left': wleft+'px'});
+				} 
         });
 			
     }
@@ -423,24 +478,6 @@ function createhtml(e,refresh){
 	}
 }
 
-self.port.on("nullError",function(data){ 
-			var errorHtml = $('<div class="selection_bubble_content">'									
-									+ '<div id="selection_bubble_close"></div>'
-									+ '<div id="askit_bubble_difinition">'
-									+ '</div>' 
-									+ '		<a href="'+ourLink+'" target="_blank">'
-									+ '			<img class="ourlink" src="'+ askit_logo +'" alt="ASK-DEV"></img>'
-									+ '		</a>'
-									+ '</div>');
-									
-			var suggestion="<div style='padding:10px;'>Please select one word.</div>";
-			
-			$("div#askit_bubble").html(errorHtml); 
-			$('#askit_bubble_difinition').html(suggestion);
-			$('#selection_bubble_close').click(function(){
-				$("div#askit_bubble").css('visibility', 'hidden');
-			});
-		});
 
 function isInsideBubble(currentTarget){     
     var valid = false;
@@ -478,7 +515,23 @@ function isValidSelection(currentTarget){
 
 function trimmedSelection() {
      var text = window.getSelection().toString();	
+     
+     if(text.length){
+		 //Find Coordinates
+		 var range = window.getSelection().getRangeAt(0);
+		//range.collapse(false);
+		 var dummy = document.createElement("span");
+		 range.insertNode(dummy);
+		 var rect = dummy.getBoundingClientRect();
+		 arrowTopCoo  = rect.top;
+		 arrowLeftCoo  = rect.left;
+		 arrowRightCoo  = rect.right;
+	 	 arrowBottomCoo  = rect.bottom;
+		 dummy.parentNode.removeChild(dummy);
+	}
+	 
      //console.log("In trimmed: "+text);
+     
 	 text = text.replace(/^\s+|\s+$/g, '');
 	 if(text.indexOf(' ')!=-1){
 	 	return '0';

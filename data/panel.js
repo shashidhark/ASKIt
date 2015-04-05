@@ -71,8 +71,9 @@ self.port.on("takeDefn", function(text)
 					$('#definition').css("border","0px solid #CCC");
 					$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> Meaning could not be found.</div>");
 				}
-				else 
+				else{ 
 					$("#definition").html(text2);
+				}
 				//$("#definition").html($(text[0]).find('h3').eq(0).html()+$(text[0]).find('ul').eq(0).html()+$(text[0]).find('h3').eq(1).html()+$(text[0]).find('ul').eq(1).html());	
 			}
 			else
@@ -149,7 +150,7 @@ self.port.on("takeSelectionFromTab", function(text){
 self.port.on("panelLoad", function(){
 		console.log("Loading panel..");
 		d=true;
-		self.port.emit("getSelectionFromTab");
+		//self.port.emit("getSelectionFromTab");
 		self.port.emit("closeBubble");
 		
 		$('#setting').hide();
