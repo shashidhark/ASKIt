@@ -14,24 +14,9 @@
    $(document);
 }(jQuery));*/
 
-var speaker        	= '';
-var loading			= '';
-var askit_logo		= '';
-var askit_logo_icon	= '';
-var askit_close_btn	= '';
-var selection 		= '';
-var synonyms		= '';
-var displayWord 	= '';
-var timer1 			= 0 ;
-var defineWord 		= '';
-var timer2 			= 1 ;
-var timer3			= 0 ;
-var errorTimer 		= 0;
-var refresh 		= false;
-var selectionText 	= '';
-var arrowTopCoo  	= 0;
-var arrowLeftCoo  	= 0;
-var arrowRightCoo  	= 0;
+var speaker        	= '';	var loading			= '';	var askit_logo		= '';	var askit_logo_icon	= '';	var askit_close_btn	= '';	var selection 		= '';
+var synonyms		= '';	var displayWord 	= '';	var timer1 			= 0 ;	var defineWord 		= '';	var timer2 			= 1 ;	var timer3			= 0 ;
+var errorTimer 		= 0;	var refresh 		= false;var selectionText 	= '';	var arrowTopCoo  	= 0;	var arrowLeftCoo  	= 0;	var arrowRightCoo  	= 0;
 var arrowBottomCoo  = 0;
 //var linkToSearch	= 'https://www.google.com/?hl=en#hl=en&q=';
 var ourLink			= 'http://www.theaskdev.com';
@@ -43,7 +28,7 @@ $(document).mousemove(function(event){
 self.port.on("closeBubble2", function(){
 	//console.log("hello");
 	$("div#askit_bubble").css('visibility', 'hidden');
-	self.port.emit("takeSelectionFromPage", trimmedSelection());
+	//self.port.emit("takeSelectionFromPage", trimmedSelection());
 });
 
 //self.port.on("getSelectionFromPage", function(){
@@ -234,6 +219,7 @@ function createhtml(e,refresh){
                     arrowBlueLeftPost 	= "left:" + arrowLeftPosition + "px";                    
                     wleft = 10;
                 }
+
                 wtop = abovePageHeight+arrowBottomCoo+20;                
                 arrowColor = "border-bottom:20px solid " + defaultOptions.use_color_style.bubbleColor + "; " + arrowBlueLeftPost
 			}
@@ -304,9 +290,9 @@ function createhtml(e,refresh){
 			var synonyms = '';             
 		self.port.on("error",function(data){ 
 			//console.log("error no conenction");
-			var nounHtml = $('<div class="selection_bubble_content">'									
+			var nounHtml = $('<div class="selection_bubble_content">'							
+    								+ '		<img id="selection_bubble_close" />'			
 									+ '<div class="selection_bubble_word" id="selection_bubble_word">'
-									+ '		<div id="selection_bubble_close" style="float:right"></div>'
 									+ '</div>'
 									+ '<div id="askit_bubble_difinition">'
 									+ '</div>' 
@@ -335,7 +321,8 @@ function createhtml(e,refresh){
 		});
 			
 		self.port.on("nullError",function(data){ 
-			var errorHtml = $('<div class="selection_bubble_content">'									
+			var errorHtml = $('<div class="selection_bubble_content">'		
+    						+ '		<img id="selection_bubble_close" />'							
 							+ '<div id="selection_bubble_close"></div>'
 							+ '<div id="askit_bubble_difinition">'
 							+ '</div>' 
@@ -374,9 +361,9 @@ function createhtml(e,refresh){
 		
             if(defVal != null && defVal.length > 0){ 
                 //newDisplay=0;
-                var nounHtml = $('<div class="selection_bubble_content" id="mainDiv">'        							
+                var nounHtml = $('<div class="selection_bubble_content" id="mainDiv">'  
+    									+ '		<img id="selection_bubble_close" />'
     									+ '<div class="selection_bubble_word" id="selection_bubble_word">'
-    									+ '		<p id="selection_bubble_close" style="float:right"></p>'
     									+ '</div>'
     									+ '<div id="askit_bubble_difinition">' 				
     									+ '		<div id="askit_bubble_dif" class="askit_dif">'+defVal+'</div>' 
@@ -408,9 +395,9 @@ function createhtml(e,refresh){
 								}    
                 }
                 else{    							  
-						var nounHtml = $('<div class="selection_bubble_content">'									
+						var nounHtml = $('<div class="selection_bubble_content">'	
+    						+ '		<img id="selection_bubble_close" />'									
 							+ '<div class="selection_bubble_word" id="selection_bubble_word">'
-							+ '		<p id="selection_bubble_close" style="float:right"></p>'
 							+ '</div>'
 							+ '<div id="askit_bubble_difinition">'
 							+ '</div>' 

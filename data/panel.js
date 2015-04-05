@@ -72,7 +72,7 @@ self.port.on("takeDefn", function(text)
 					$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> Meaning could not be found.</div>");
 				}
 				else{ 
-					$("#definition").html(text2);
+					$("#definition").html('<div style="margin:10px;">'+text2+'</div>');
 				}
 				//$("#definition").html($(text[0]).find('h3').eq(0).html()+$(text[0]).find('ul').eq(0).html()+$(text[0]).find('h3').eq(1).html()+$(text[0]).find('ul').eq(1).html());	
 			}
@@ -96,6 +96,7 @@ function dispDef(){
 	//$('#about').hide();	
 	$('#definition').show();
 	if(data.length==0){
+		$('#definition').css("border","0px solid #CCC");
 		$('#definition').html("<div class=\"alert\"><strong>Warning!</strong> Please enter a word</div>");
 	}
 	else{
@@ -117,7 +118,7 @@ $('#search').click(function(e)
 		if(text==2)
 			$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> Check internet connection.</div>");
 		else{
-			$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> It's taking too much time to load.</div>");
+			$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> Check internet connection.</div>");
 		}
 	});
 });
@@ -142,11 +143,27 @@ self.port.on("notFound", function(){
 	
 self.port.on("takeSelectionFromTab", function(text){
 	//console.log("takeSelectionFromTab catched");
-	if(text!='' && text != undefined && text!=0){
+	text = text.replace(/^\s+|\s+$/g, '');
+	
+	if(text.indexOf(' ')!=-1){
+		//Select one word
+		$("#data").val("");
+		$('#definition').css("border","0px solid #CCC");
+		$('#definition').html("<div class=\"alert\"><strong>Warning!</strong> Please select one word</div>");
+	}
+	else if(text.length != 0){//(text!='' && text != undefined && text!=0){
 		$("#data").val(text);
 		$("#search").click();
 	}
+	else{
+		$("#data").val("");
+		$('#setting').hide();
+		$('#about').hide();
+		$('#definition').html('<i class="tipDetail"><u class="tip">Tip:</u> Select any word from webpage and click ASKIt add-on icon on toolbar to view the meaning.</i>');
+		$('#def').show();
+	}
 });
+
 self.port.on("panelLoad", function(){
 		//console.log("Loading panel..");
 		d=true;
