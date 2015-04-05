@@ -77,7 +77,7 @@ self.port.on("takeStat", function(x){
 
 $(document).dblclick(function(e) {
 	evt=e;
-	console.log(evt.pageX+" "+evt.pageY);
+	//console.log(evt.pageX+" "+evt.pageY);
 	//console.log('get stat');
 	self.port.emit("getStat");
 });
@@ -299,11 +299,11 @@ function createhtml(e,refresh){
 			}
 			
 			prevHeight=$("div#askit_bubble").height();
-			console.log("Search"+prevHeight);
+			//console.log("Search"+prevHeight);
 			
 			var synonyms = '';             
 		self.port.on("error",function(data){ 
-			console.log("error no conenction");
+			//console.log("error no conenction");
 			var nounHtml = $('<div class="selection_bubble_content">'									
 									+ '<div class="selection_bubble_word" id="selection_bubble_word">'
 									+ '		<div id="selection_bubble_close" style="float:right"></div>'
@@ -329,7 +329,7 @@ function createhtml(e,refresh){
 			
 			if(defaultOptions.use_window=='above'){
 				var hn = $('div#askit_bubble').height()-prevHeight;
-				console.log(prevHeight+" "+$('div#askit_bubble').height()+" "+hn);
+				//console.log(prevHeight+" "+$('div#askit_bubble').height()+" "+hn);
 				$("div#askit_bubble").css({'top': wtop-hn+'px','left': wleft+'px'});
 			} 
 		});
@@ -403,7 +403,7 @@ function createhtml(e,refresh){
 								$('<span style="font-weight:bold;padding-right:10px;"></span>').html(displayWord).appendTo('#selection_bubble_word');							 
 								if(defaultOptions.use_window=='above'){
 									var hn = $('div#askit_bubble').height()-prevHeight;
-									console.log(prevHeight+" "+$('div#askit_bubble').height()+" "+hn);
+									//console.log(prevHeight+" "+$('div#askit_bubble').height()+" "+hn);
 									$("div#askit_bubble").css({'top': wtop-hn+'px','left': wleft+'px'});
 								}    
                 }
@@ -467,7 +467,7 @@ function createhtml(e,refresh){
 				});
 				if(defaultOptions.use_window=='above'){
 					var hn = $('div#askit_bubble').height()-prevHeight;
-					console.log(prevHeight+" "+$('div#askit_bubble').height()+" "+hn);
+					//console.log(prevHeight+" "+$('div#askit_bubble').height()+" "+hn);
 					$("div#askit_bubble").css({'top': wtop-hn+'px','left': wleft+'px'});
 				} 
         });

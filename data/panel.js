@@ -39,7 +39,7 @@ self.port.on("takeDefn", function(text)
 			respData.find('div.xpdxpnd').eq(respData.find('div.xpdxpnd').length-1).remove();
 			//lr_dct_sf_sen
 		
-			console.log("Def: Displayed..0");
+			//console.log("Def: Displayed..0");
 			if(respData.html() != undefined && respData.html() !="")
 				$("#definition").html(removeAnchorTag(replaceNumber(respData.html())));
 			else {
@@ -148,7 +148,7 @@ self.port.on("takeSelectionFromTab", function(text){
 	}
 });
 self.port.on("panelLoad", function(){
-		console.log("Loading panel..");
+		//console.log("Loading panel..");
 		d=true;
 		//self.port.emit("getSelectionFromTab");
 		self.port.emit("closeBubble");
