@@ -77,7 +77,7 @@ $(document).click(function(event) {
 $(document).ready(function(){ 
 	if($("div#askit_bubble").length == 0){
 		var element = document.body.firstElementChild;
-		bubbleDOM 	= $('<div id=askit_bubble class="selection_bubble fontSize13 noSelect" style="background-color: #F2AE02;z-index:9999; border: 2px solid #FFED7F;fetching=false"></div>');
+		bubbleDOM 	= $('<div id=askit_bubble class="selection_bubble fontSize13 noSelect" style="background-color: #F6F2D4;z-index:9999; border: 2px solid #F6F2D4;fetching=false"></div>');
 		//Modified askit_bubble -> askit_bubble
 		bubbleDOM.insertBefore(element);
 	}	    
@@ -252,7 +252,7 @@ function createhtml(e,refresh){
                 arrowColor = "border-top:20px solid " + defaultOptions.use_color_style.bubbleColor + "; " + arrowBlueLeftPost            
 			}			
 			//console.log(arrowTopCoo+" "+arrowLeftCoo+" "+wtop+" "+wleft);
-			var loader = '<div id="searchDiv" style=\'padding:10px;\'>Searching ....</div>';
+			var loader = '<div id="searchDiv" style=\'padding:10px;\'><img id="selection_bubble_close" />Searching ....</div>';
 			loader+='<div class="'+askit_arrow_css+'" style="'+ arrowBlueLeftPost +'"></div><div class="'+askit_bubble_arrow_css+'" style="'+arrowColor+'"></div>';
 			
 			if(!refresh){
@@ -267,7 +267,11 @@ function createhtml(e,refresh){
 				$("div#askit_bubble").css('visibility', 'visible');
 			}			
 
-			$("div#askit_bubble").html(loader);			
+			$("div#askit_bubble").html(loader);
+			$('#selection_bubble_close').click(function(){
+				$("div#askit_bubble").css('visibility', 'hidden');
+			});
+						
 			displayWord = firstUC(selection);
 			var apostrophy=selection.indexOf("'");
 			
@@ -644,7 +648,8 @@ function checkDomain(){
     
     var ignoreDomain = {
         'wordnetweb.princeton.edu' : 'Meaning',
-	    'google.com' : 'Dictionary'
+	    'google.com' : 'Dictionary',
+	    'google.co.in' : 'Google Dictionary'
     }
     if(ignoreDomain[siteDomain]){
         checkDomain = true

@@ -254,6 +254,7 @@ $('#set').click(function(e) {
 			$("#setting").hide();
 			$("#def").show();
 			$("#about").hide();
+			$('#data').focus();
 		}
 		else{
 			$("#setting").show();
@@ -295,7 +296,7 @@ self.port.on("panelLoad", function(){
 		d=true;
 		//self.port.emit("getSelectionFromTab");
 		self.port.emit("closeBubble");
-		
+		$('#data').focus();
 		$('#setting').hide();
 		$('#about').hide();
 		$('#def').show();
@@ -326,12 +327,14 @@ $(document).ready(function(){
 			$("#setting").hide();
 			$("#def").show();
 			$("#about").hide();
+			$('#data').focus();
 		}
 		else{
 			$("#setting").hide();
 			$("#def").hide();
 			$("#about").show();
-			$('#details').html('<div class="well">\
+			$('#details').css({"background-color":"#F6F2D4", "padding":"10px", "border":"1px solid #CCC"});
+			$('#details').html('<div>\
 						<p><u>Created By:</u> Shashidhara and Alwyn Edison Mendonca</p>\
 						<p><u>Contributions By:</u> Ashwin Loyal Mendonca</p>\
 						Copyright 2014-2015 ASK-DEV.Inc<br />\
@@ -342,7 +345,8 @@ $(document).ready(function(){
 	});
 					
 	$('#version').click(function() {
-		$('#details').html('<div class="well">\
+		$('#details').css({"background-color":"#F6F2D4", "padding":"10px", "border":"1px solid #CCC"});
+		$('#details').html('<div>\
 							<b>ASKIt 0.3</b>\
 								<ol class="noType">\
 									<li><span class="label label-success">NEW</span> `Smart Search` is default now instead Google - Combination of Google and WordNet. </li>\
@@ -378,9 +382,11 @@ $(document).ready(function(){
 								<li><span class="label label-success">NEW</span> Add-on icon changes its behavior while turning it off and on. </li>\
 							</ol>\
 						</div>');
-					});
+	});
+					
 	$('#guide').click(function() {
-		$('#details').html('<div class="well">\
+		$('#details').css({"background-color":"#F6F2D4", "padding":"10px", "border":"1px solid #CCC"});
+		$('#details').html('<div>\
 		<span>This add-on is helpful to view the meanings easily as you browse the websites.</span>\
 		<br /><u>Note:</u>\
 		<ul>\
@@ -393,7 +399,8 @@ $(document).ready(function(){
 			<li>Under add-on menu you can choose required dictionary to fetch meaning, default `Smart Search` is selected. Right now "Google" and "WordNet" are optional. </li>\
 			<li>Double-click on any word to view its meaning in a small pop-up bubble. In bubble "more" link is provided to visit the related website to check meaning.</li>\
 		</ol></div>');
-					});
+	});
+	
 	var on=true;
 
 	$('#onoff').click(function() {
