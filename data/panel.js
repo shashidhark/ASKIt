@@ -1,13 +1,13 @@
 /*
 |===============================================================================
-|		Last Modified Date 	: 26/03/2015
+|		Last Modified Date 	: 05/04/2015
 |===============================================================================
 |		Copyright 2014-2015 ASK-DEV.Inc. All Rights Reserved. Released under the GPL license
 |		Developed by 	: Shashidhar and Alwyn Edison Mendonca
 |		WebSite 		: http://www.theaskdev.com
 |===============================================================================
 */
-
+var totalRequestDone=0;
 var d=true;
 function replaceNumber(text){
 	return text.replace(/<strong>\d*<\/strong>./g, '');
@@ -18,6 +18,7 @@ function replaceWordNetChar(text){
 }
 
 function removeAnchorTag(text){
+	text=text.replace("Wikipedia", "");
 	return (text.replace(/<a\b[^>]*>/ig,"")).replace(/<\/a>/ig, "");
 }
 
@@ -28,64 +29,187 @@ function firstUC(word){
 	
 self.port.on("takeDefn", function(text)
 {
-	if(((text[1]==1 && $(text[0]).find('ul').eq(0).find('li').length) || (text[1]==0 && $(text[0]).find('div.lr_dct_sf_sen.vk_txt').length)) && d==true)
-	{
-		d=false;
-		$('#definition').css("border","1px solid #CCC");
-		if(text[1]==0){
-			var respData = $(text[0]).find('div.lr_container');
-			respData.find('div.lr_dct_ent_ph').remove();
-			respData.find('div.vkc_np').remove();
-			respData.find('div.xpdxpnd').eq(respData.find('div.xpdxpnd').length-1).remove();
-			//lr_dct_sf_sen
+	if( (text[1]==1 && $(text[0]).find('ul').eq(0).find('li').length) || 
+		(text[1]==0 && $(text[0]).find('div.lr_dct_sf_sen.vk_txt').length) || 
+		(text[1]==0 && $(text[0]).find('div._oDd').length) ||
+		(text[1]==0 && $(text[0]).find('div.kno-rdesc').length) )
 		
-			//console.log("Def: Displayed..0");
-			if(respData.html() != undefined && respData.html() !="")
-				$("#definition").html(removeAnchorTag(replaceNumber(respData.html())));
-			else {
-				$('#definition').css("border","0px solid #CCC");
-				$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> Meaning could not be found.</div>");
+	{
+		if(d==true){
+			d=false;
+			$('#definition').css("border","1px solid #CCC");
+			$('#definition').css("background-color","#F6F2D4");
+			if(text[1]==0){ //Google
+				//if($(text[0]).find('div.lr_container')
+			
+				var respData = $(text[0]).find('div.lr_container');
+				respData.find('div.lr_dct_ent_ph').remove();
+				respData.find('div.vkc_np').remove();
+				respData.find('div.xpdxpnd').eq(respData.find('div.xpdxpnd').length-1).remove();
+				//lr_dct_sf_sen
+		
+				//console.log("Def: Displayed..0");
+				if(respData.html() != undefined && respData.html() !="")
+					$("#definition").html(removeAnchorTag(replaceNumber(respData.html())));
+				else { //console.log("Def: Displayed..2");
+				
+					if($(text[0]).find('div._oDd').length)
+					{
+						respData = $(text[0]).find('div._oDd').eq(0).text();
+						$('#definition').css("text-align","justify");
+						$("#definition").html(removeAnchorTag(replaceNumber(respData)));
+					}
+					else if($(text[0]).find('div.kno-rdesc').length){
+						respData =  $(text[0]).find('div.kno-rdesc').eq(0).text();
+						//$('#definition').css("text-align","justify");
+						$("#definition").html(removeAnchorTag(replaceNumber(respData)));
+					}
+					else{
+						$('#definition').css("border","0px solid #CCC");
+						$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> Meaning could not be found.</div>");
+					}
+				}
 			}
+			else{ //WordNet
+				//self.port.emit("fetchDefWordNet", [$(text[0]).find('ul').eq(0).find('li').eq(0).text(), data]);
+				////console.log(text[0]);
+				var ulCount = $(text[0]).find('ul').length;
+				var h3Count = $(text[0]).find('h3').length;
+				text = removeAnchorTag(text[0]);
+		
+				if(h3Count == ulCount)
+				{
+					var count=0;
+					var text2="", ulTag;
+					while(count < h3Count)
+					{
+							//ulTag = ($(text[0]).find('ul').eq(count).html()).replace('S:', '');
+						text2 += "<h4>"+$(text).find('h3').eq(count).html()+"</h4>"+$(text).find('ul').eq(count).html();
+						count++;
+					}
+					text2 = replaceWordNetChar(text2);
+					//console.log("Def: Displayed..1");
+					if(text2=="")
+					{
+						$('#definition').css("border","0px solid #CCC");
+						$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> Meaning could not be found.</div>");
+					}
+					else{ 
+						$("#definition").html('<div style="margin:10px;">'+text2+'</div>');
+					}
+					//$("#definition").html($(text[0]).find('h3').eq(0).html()+$(text[0]).find('ul').eq(0).html()+$(text[0]).find('h3').eq(1).html()+$(text[0]).find('ul').eq(1).html());	
+				}
+				else
+				{
+					var text2 = $(text).find('ul').eq(0).html()
+					text2 = replaceWordNetChar(text2);
+					//console.log("Def: Displayed..2");
+					$("#definition").html(text2);
+				}
+			}
+			self.port.on("dispDone");
+			self.port.emit("abortReq");
+		}
+	}else{
+		if(text[3]==1){
+			self.port.emit("findDefn2",[$("#data").val(), 1]);
 		}
 		else{
-			//self.port.emit("fetchDefWordNet", [$(text[0]).find('ul').eq(0).find('li').eq(0).text(), data]);
-			////console.log(text[0]);
-			var ulCount = $(text[0]).find('ul').length;
-			var h3Count = $(text[0]).find('h3').length;
-			text = removeAnchorTag(text[0]);
-		
-			if(h3Count == ulCount)
-			{
-				var count=0;
-				var text2="", ulTag;
-				while(count < h3Count)
-				{
-						//ulTag = ($(text[0]).find('ul').eq(count).html()).replace('S:', '');
-					text2 += "<h4>"+$(text).find('h3').eq(count).html()+"</h4>"+$(text).find('ul').eq(count).html();
-					count++;
-				}
-				text2 = replaceWordNetChar(text2);
-				//console.log("Def: Displayed..1");
-				if(text2=="")
-				{
-					$('#definition').css("border","0px solid #CCC");
-					$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> Meaning could not be found.</div>");
-				}
-				else{ 
-					$("#definition").html('<div style="margin:10px;">'+text2+'</div>');
-				}
-				//$("#definition").html($(text[0]).find('h3').eq(0).html()+$(text[0]).find('ul').eq(0).html()+$(text[0]).find('h3').eq(1).html()+$(text[0]).find('ul').eq(1).html());	
-			}
-			else
-			{
-				var text2 = $(text).find('ul').eq(0).html()
-				text2 = replaceWordNetChar(text2);
-				//console.log("Def: Displayed..2");
-				$("#definition").html(text2);
-			}
+			$('#definition').css("border","0px solid #CCC");
+			$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> Meaning could not be found.</div>");
 		}
-		self.port.on("dispDone");
-		self.port.emit("abortReq");
+	}
+});
+
+self.port.on("takeDefn2", function(text)
+{
+	if( (text[1]==1 && $(text[0]).find('ul').eq(0).find('li').length) || 
+		(text[1]==0 && $(text[0]).find('div.lr_dct_sf_sen.vk_txt').length) || 
+		(text[1]==0 && $(text[0]).find('div._oDd').length) ||
+		(text[1]==0 && $(text[0]).find('div.kno-rdesc').length) )
+		
+	{
+		if(d==true){
+			d=false;
+			$('#definition').css("border","1px solid #CCC");
+			if(text[1]==0){ //Google
+				//if($(text[0]).find('div.lr_container')
+			
+				var respData = $(text[0]).find('div.lr_container');
+				respData.find('div.lr_dct_ent_ph').remove();
+				respData.find('div.vkc_np').remove();
+				respData.find('div.xpdxpnd').eq(respData.find('div.xpdxpnd').length-1).remove();
+				//lr_dct_sf_sen
+		
+				//console.log("Def: Displayed..0");
+				if(respData.html() != undefined && respData.html() !="")
+					$("#definition").html(removeAnchorTag(replaceNumber(respData.html())));
+				else { //console.log("Def: Displayed..2");
+				
+					if($(text[0]).find('div._oDd').length)
+					{
+						respData = $(text[0]).find('div._oDd').eq(0).text();
+						$('#definition').css("text-align","justify");
+						$("#definition").html(removeAnchorTag(replaceNumber(respData)));
+					}
+					else if($(text[0]).find('div.kno-rdesc').length){
+						respData =  $(text[0]).find('div.kno-rdesc').eq(0).text();
+						//$('#definition').css("text-align","justify");
+						$("#definition").html(removeAnchorTag(replaceNumber(respData)));
+					}
+					else{
+						$('#definition').css("border","0px solid #CCC");
+						$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> Meaning could not be found.</div>");
+					}
+				}
+			}
+			else{ //WordNet
+				//self.port.emit("fetchDefWordNet", [$(text[0]).find('ul').eq(0).find('li').eq(0).text(), data]);
+				////console.log(text[0]);
+				var ulCount = $(text[0]).find('ul').length;
+				var h3Count = $(text[0]).find('h3').length;
+				text = removeAnchorTag(text[0]);
+		
+				if(h3Count == ulCount)
+				{
+					var count=0;
+					var text2="", ulTag;
+					while(count < h3Count)
+					{
+							//ulTag = ($(text[0]).find('ul').eq(count).html()).replace('S:', '');
+						text2 += "<h4>"+$(text).find('h3').eq(count).html()+"</h4>"+$(text).find('ul').eq(count).html();
+						count++;
+					}
+					text2 = replaceWordNetChar(text2);
+					//console.log("Def: Displayed..1");
+					if(text2=="")
+					{
+						$('#definition').css("border","0px solid #CCC");
+						$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> Meaning could not be found.</div>");
+					}
+					else{ 
+						$("#definition").html('<div style="margin:10px;">'+text2+'</div>');
+					}
+					//$("#definition").html($(text[0]).find('h3').eq(0).html()+$(text[0]).find('ul').eq(0).html()+$(text[0]).find('h3').eq(1).html()+$(text[0]).find('ul').eq(1).html());	
+				}
+				else
+				{
+					var text2 = $(text).find('ul').eq(0).html()
+					text2 = replaceWordNetChar(text2);
+					//console.log("Def: Displayed..2");
+					$("#definition").html(text2);
+				}
+			}
+			self.port.on("dispDone");
+			self.port.emit("abortReq");
+		}
+	}else{
+		//if(text[3]==1){
+			//self.port.emit("findDefn2",[$("#data").val(), 1]);
+		//}
+		
+		$('#definition').css("border","0px solid #CCC");
+		$("#definition").html("<div class=\"alert\"><strong>Warning!</strong> Meaning could not be found.</div>");
 	}
 });
 
@@ -101,11 +225,12 @@ function dispDef(){
 	}
 	else{
 		$('#definition').css("border","0px solid #CCC");
+		$('#definition').css("background-color","#F8ECC2");
 		$('#definition').html('<i style="color:blue" class="fa fa-circle-o-notch fa-spin fa-2x"></i>');
 		////console.log("hi");
 		d=true;
 		//console.log("Emit find def..");
-		self.port.emit("findDefn", data);
+		self.port.emit("findDefn", [data, 0]);
 	}
 }
 
@@ -155,10 +280,11 @@ self.port.on("takeSelectionFromTab", function(text){
 		$("#data").val(text);
 		$("#search").click();
 	}
-	else{
+	else if($("#data").val() == ""){
 		$("#data").val("");
 		$('#setting').hide();
 		$('#about').hide();
+		$('#definition').css("border","0px solid #CCC");
 		$('#definition').html('<i class="tipDetail"><u class="tip">Tip:</u> Select any word from webpage and click ASKIt add-on icon on toolbar to view the meaning.</i>');
 		$('#def').show();
 	}
@@ -183,13 +309,6 @@ $(document).ready(function(){
 	
 });
 
-$("#set").hover(function(e){
-		$("#gear").attr("class","fa fa-cog fa-1x fa-spin");
-	});
-	
-	$("#set").mouseout(function(e){
-		$("#gear").attr("class","fa fa-cog fa-1x");
-	});
 		
 	$('#data').keypress(function(event){
  
@@ -224,9 +343,22 @@ $("#set").hover(function(e){
 					
 	$('#version').click(function() {
 		$('#details').html('<div class="well">\
+							<b>ASKIt 0.3</b>\
+								<ol class="noType">\
+									<li><span class="label label-success">NEW</span> `Smart Search` is default now instead Google - Combination of Google and WordNet. </li>\
+									<li><span class="label label-info">CHANGED</span> UI Improvement for ASKIt Panel. </li>\
+                            	</ol>\
+							<b>ASKIt 0.2.2</b>\
+								<ol class="noType">\
+									<li><span class="label label-warning">FIXED</span> ASKIt add-on in private window. </li>\
+                            	</ol>\
 							<b>ASKIt 0.2.1</b>\
 								<ol class="noType">\
-                            		<li><span class="label label-success">NEW</span> Version goes here</li>\
+									<li><span class="label label-warning">FIXED</span> Power button issue. </li>\
+									<li><span class="label label-warning">FIXED</span> Bubble display postion above and below the word. </li>\
+									<li><span class="label label-warning">FIXED</span> WordNet search result in ASKIt panel. </li>\
+									<li><span class="label label-info">CHANGED</span> Many changes to the bubble UI. </li>\
+									<li><span class="label label-warning">FIXED</span> Many more bug fixes. </li>\
                             	</ol>\
 							<b>ASKIt 0.2</b>\
                                 <ol class="noType">\
@@ -258,7 +390,7 @@ $("#set").hover(function(e){
 		How to use ASKIt?\
 		<ol>\
 			<li>You can turn on and off the add-on, under add-on menu.</li>\
-			<li>Under add-on menu you can choose required dictionary to fetch meaning, default Google is selected. Right now another dictionary "WordNet" is supported. </li>\
+			<li>Under add-on menu you can choose required dictionary to fetch meaning, default `Smart Search` is selected. Right now "Google" and "WordNet" are optional. </li>\
 			<li>Double-click on any word to view its meaning in a small pop-up bubble. In bubble "more" link is provided to visit the related website to check meaning.</li>\
 		</ol></div>');
 					});
@@ -280,6 +412,10 @@ $("#set").hover(function(e){
 	
 	$('#searchLink1').click(function() {
 		self.port.emit("set1");
+	});
+	
+	$('#searchLink0').click(function() {
+		self.port.emit("set0");
 	});
 	
 	$('#searchLink2').click(function() {

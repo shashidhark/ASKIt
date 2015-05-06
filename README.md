@@ -23,6 +23,28 @@ How to use ASKIt?
 ------------------------------------------------------------------------------------------------------------------------------------
 Features
 ========
+ASKIt 0.3.1
+-----------
+	*FIXED* Minor bug fixes.
+
+ASKIt 0.3
+----------
+	*NEW* `Smart Search` is default now instead Google - Combination of Google and WordNet.
+	*CHANGED* UI Improvement for ASKIt Panel.
+ 	
+ASKIt 0.2.2	
+-----------
+    *FIXED* ASKIt add-on in private window.
+
+ASKIt 0.2.1
+-----------
+
+	*FIXED* Power button issue.
+	*FIXED* Bubble display postion above and below the word.
+	*FIXED* WordNet search result in ASKIt panel.
+	*CHANGED* Many changes to the bubble UI.
+	*FIXED* Many more bug fixes. 
+
 ASKIt 0.2
 ---------
 

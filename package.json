@@ -1,13 +1,14 @@
 {
-  "name": "askit",
-  "title": "ASKIt",
-  "id": "jid1-AkNvXJYPZAO7og",
-  "description": "A simple plugin which displays word meaning on the same page.",
-  "author": "Shashidhar and Alwyn Edison Mendonca",
-  "contributors":"Ashwin Loyal Mendonca",
-  "license": "MPL 2.0",
-  "version": "0.2",
-  "homepage": "http://www.theaskdev.com",
-  "icon":"data/icon/green32.png",
-  "icon64":"data/icon/green64.png"
+  			"name" : "askit",
+  		   "title" : "ASKIt",
+              "id" : "jid1-AkNvXJYPZAO7og",
+  	 "description" : "A simple plugin which displays word meaning on the same page.",
+          "author" : "Shashidhar and Alwyn Edison Mendonca",
+  	"contributors" : "Ashwin Loyal Mendonca",
+  		 "license" : "MPL 2.0",
+  		 "version" : "0.3.2",
+		"homepage" : "http://www.theaskdev.com",
+  			"icon" : "data/icon/green32.png",
+  		  "icon64" : "data/icon/green64.png",
+     "permissions" : {	"private-browsing": true	}
 }

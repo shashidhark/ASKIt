@@ -16,10 +16,10 @@
   left: 0;
   width: 300px; 
   font-size: 11px;  
-  background-color: #F8ECC2;
+  background-color: #F6F2D4;
   color: #1D0101;
   font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", sans-serif ;
-  border:2px solid #2473E9 ;
+  border:2px solid #F6F2D4 ;
   box-shadow: 0 0 20px #333;
  -webkit-box-shadow: 0 0 20px #333;
  -webkit-border-radius: 5px 5px 5px 5px ;
@@ -76,6 +76,7 @@
 
 .askit_dif{
 	margin:5px 10px 0 0 !important;
+  	text-align: justify;
 	/*line-height:15px;*/
 }
 
@@ -141,7 +142,7 @@ div.askit-arrow_above {
   height:0px; 
   border-left:20px solid transparent !important;
   border-right:20px solid transparent !important;
-  border-top:20px solid #F8ECC2 !important;
+  border-top:20px solid #F6F2D4 !important;
   font-size:0px;
   line-height:0px; 
   position: absolute; 
@@ -154,7 +155,7 @@ div.askit-bubble-arrow_above {
   height:0px; 
   border-left:20px solid transparent !important;
   border-right:20px solid transparent !important;
-  border-top:20px solid #F8ECC2 !important;
+  border-top:20px solid #F6F2D4 !important;
   font-size:0px;
   line-height:0px; 
   position: absolute; 
@@ -167,7 +168,7 @@ div.askit-arrow_below {
   height:0px; 
   border-left:20px solid transparent !important;
   border-right:20px solid transparent !important;
-  border-bottom:20px solid #F8ECC2 !important;
+  border-bottom:20px solid #F6F2D4 !important;
   font-size:0px;
   line-height:0px; 
   position: absolute; 
@@ -180,7 +181,7 @@ div.askit-bubble-arrow_below {
   height:0px; 
   border-left:20px solid transparent !important;
   border-right:20px solid transparent !important;
-  border-bottom:20px solid #F8ECC2 !important;
+  border-bottom:20px solid #F6F2D4 !important;
   font-size:0px;
   line-height:0px; 
   position: absolute; 
