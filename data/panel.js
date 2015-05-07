@@ -347,6 +347,14 @@ $(document).ready(function(){
 	$('#version').click(function() {
 		$('#details').css({"background-color":"#F6F2D4", "padding":"10px", "border":"1px solid #CCC"});
 		$('#details').html('<div>\
+							<b>ASKIt 0.3.3</b>\
+								<ol class="noType">\
+									<li><span class="label label-warning">FIXED</span> Many bug Fixes </li>\
+                            	</ol>\
+                            <b>ASKIt 0.3.1</b>\
+								<ol class="noType">\
+									<li><span class="label label-warning">FIXED</span> Many bug Fixes </li>\
+                            	</ol>\
 							<b>ASKIt 0.3</b>\
 								<ol class="noType">\
 									<li><span class="label label-success">NEW</span> `Smart Search` is default now instead Google - Combination of Google and WordNet. </li>\
