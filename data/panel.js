@@ -296,10 +296,10 @@ self.port.on("panelLoad", function(){
 		d=true;
 		//self.port.emit("getSelectionFromTab");
 		self.port.emit("closeBubble");
-		$('#data').focus();
 		$('#setting').hide();
 		$('#about').hide();
 		$('#def').show();
+		$('#data').focus();
 	});
 	
 $(document).ready(function(){    
