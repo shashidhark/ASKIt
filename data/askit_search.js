@@ -23,9 +23,7 @@ var totalRequestDone=0;
 var ourLink			= 'http://www.theaskdev.com';
 
 self.port.on("closeBubble2", function(){
-	//console.log("hello");
 	$("div#askit_bubble").css('visibility', 'hidden');
-	//self.port.emit("takeSelectionFromPage", trimmedSelection());
 });
 
 self.port.on("getImages", function (loading1, speaker1, askit_close_btn1, askit_more1, askit_logo1, askit_logo_icon1){ 
@@ -104,6 +102,21 @@ function selectEventBind(e,selectedEvent){
 
 var prevHeight;
 
+var askit_arrow_css ;
+				var askit_bubble_arrow_css ;	
+				var wleft;
+				var wtop;
+				var arrowColor;
+				var belowPageHeight;
+				var abovePageHeight;  
+	            var belowFlag;
+	            var aboveFlag;
+		        var arrowFlag;
+
+                var belowPageHeight;
+                var abovePageHeight;
+                var screenWidth;
+
 function createhtml(e,refresh){    
 	if(checkDomain()){
 		return;
@@ -147,19 +160,19 @@ function createhtml(e,refresh){
         			return;
 				}
 				$("div#askit_bubble").attr('fetching', 'true');			
-				var askit_arrow_css 		= "askit-arrow_" + defaultOptions.use_window;
-				var askit_bubble_arrow_css 	= "askit-bubble-arrow_" + defaultOptions.use_window;	
-				var wleft 					= pageX;
-				var wtop 					= pageY;
-				var arrowColor 				= '';
-				var belowPageHeight 		= window.innerHeight + window.scrollY;
-				var abovePageHeight 		= window.scrollY;  
-	            var belowFlag 				= false;
-	            var aboveFlag 				= false;
-		        var arrowFlag 				= true;
-                var belowPageHeight 		= window.innerHeight + window.scrollY;
-                var abovePageHeight 		= window.scrollY;
-                var screenWidth 			= document.body.offsetWidth - 405 ;
+				 askit_arrow_css 		= "askit-arrow_" + defaultOptions.use_window;
+				 askit_bubble_arrow_css 	= "askit-bubble-arrow_" + defaultOptions.use_window;	
+				 wleft 					= pageX;
+				 wtop 					= pageY;
+				 arrowColor 				= '';
+				 belowPageHeight 		= window.innerHeight + window.scrollY;
+				 abovePageHeight 		= window.scrollY;  
+	             belowFlag 				= false;
+	             aboveFlag 				= false;
+		         arrowFlag 				= true;
+                 belowPageHeight 		= window.innerHeight + window.scrollY;
+                 abovePageHeight 		= window.scrollY;
+                 screenWidth 			= document.body.offsetWidth - 405 ;
 			
 				if(pageY >= belowPageHeight-150 && defaultOptions.use_window == "below"){
 		    		defaultOptions.use_window 	= "above";
@@ -339,7 +352,14 @@ function createhtml(e,refresh){
 		
 			self.port.emit("completeBubble",[selection, 0]);
 
-		    self.port.on("completeRes",function(data){ 
+		    
+    		}
+    		clearTimeout(timer2);
+    	},20);
+	}
+}
+
+self.port.on("completeRes",function(data){ 
 		        //console.log(totalRequestDone+">>");
 		        //if(data[3]==1){
 		        //	totalRequestDone++;	
@@ -357,6 +377,7 @@ function createhtml(e,refresh){
 					}
 					else if($(data[0]).find('div._oDd').length){
 						defVal =  $(data[0]).find('div._oDd').eq(0).text();
+
 					}
 					else if($(data[0]).find('div.kno-rdesc').length){
 						defVal =  $(data[0]).find('div.kno-rdesc').eq(0).text();
@@ -553,12 +574,6 @@ function createhtml(e,refresh){
 							$("div#askit_bubble").css({'top': wtop-hn+'px','left': wleft+'px'});
 						} 
 		    	});
-    		}
-    		clearTimeout(timer2);
-    	},20);
-	}
-}
-
 
 function isInsideBubble(currentTarget){     
     var valid = false;
@@ -647,9 +662,7 @@ function checkDomain(){
 	}
     
     var ignoreDomain = {
-        'wordnetweb.princeton.edu' : 'Meaning',
-	    'google.com' : 'Dictionary',
-	    'google.co.in' : 'Google Dictionary'
+        'wordnetweb.princeton.edu' : 'Meaning'
     }
     if(ignoreDomain[siteDomain]){
         checkDomain = true

@@ -270,18 +270,21 @@ self.port.on("notFound", function(){
 self.port.on("takeSelectionFromTab", function(text){
 	//console.log("takeSelectionFromTab catched");
 	text = text.replace(/^\s+|\s+$/g, '');
-	
+	//console.log("In panel "+text.length);
 	if(text.indexOf(' ')!=-1){
 		//Select one word
+	//	console.log("1");
 		$("#data").val("");
 		$('#definition').css("border","0px solid #CCC");
 		$('#definition').html("<div class=\"alert\"><strong>Warning!</strong> Please select one word</div>");
 	}
-	else if(text.length != 0){//(text!='' && text != undefined && text!=0){
+	else if(text.length!=0 && text!='' && text!=undefined ){
+	//	console.log("2");
 		$("#data").val(text);
 		$("#search").click();
 	}
 	else if($("#data").val() == ""){
+	//	console.log("3");
 		$("#data").val("");
 		$('#setting').hide();
 		$('#about').hide();
