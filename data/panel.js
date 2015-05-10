@@ -419,11 +419,11 @@ $(document).ready(function(){
 		////console.log(on);
 		if(on){
 			self.port.emit("onIt");
-			$('#onoff').attr("class","btn btn-success");
+			$('#onoff').css("color","green");
 		}
 		else{
 			self.port.emit("offIt");
-			$('#onoff').attr("class","btn btn-danger");
+			$('#onoff').css("color","#D14237");
 		}
 		////console.log(this.checked);
 	});
