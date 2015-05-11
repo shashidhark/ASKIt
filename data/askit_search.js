@@ -369,6 +369,7 @@ self.port.on("completeRes",function(data){
 				if(data[1]){ //Wordnet
 					//console.log("Def before extract: "+$(data[0]).find('ul').eq(0).find('li').eq(0).text()+" "+selection);
 					defVal = extractDef($(data[0]).find('ul').eq(0).find('li').eq(0).text(), selection);
+					defVal +='.';
 				}
 				else{//Google
 			
