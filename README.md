@@ -23,7 +23,7 @@ How to use ASKIt?
 ------------------------------------------------------------------------------------------------------------------------------------
 Features
 ========
-ASKIt 0.3.3
+ASKIt 0.3.5
 -----------
 	*CHANGED* UI Improvement for ASKIt Panel.
 	*FIXED* Minor bug fixes.
