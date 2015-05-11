@@ -25,8 +25,8 @@ Features
 ========
 ASKIt 0.3.5
 -----------
-	*CHANGED* UI Improvement for ASKIt Panel.
-	*FIXED* Minor bug fixes.
+	*CHANGED* UI Improvement for ASKIt Panel and ASKIt Bubble.
+	*FIXED* Many more fixes and improvements.
 	
 ASKIt 0.3.1
 -----------

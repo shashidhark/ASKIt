@@ -352,8 +352,8 @@ $(document).ready(function(){
 		$('#details').html('<div>\
 							<b>ASKIt 0.3.5</b>\
 								<ol class="noType">\
-									<li><span class="label label-info">CHANGED</span> UI Improvement for ASKIt Panel. </ </li>\
-									<li><span class="label label-warning">FIXED</span> Minor bug Fixes </li>\
+									<li><span class="label label-info">CHANGED</span> UI Improvement for ASKIt Panel and ASKIt Bubble. </ </li>\
+									<li><span class="label label-warning">FIXED</span> Many more fixes and improvements. </li>\
                             	</ol>\
                             <b>ASKIt 0.3.1</b>\
 								<ol class="noType">\
