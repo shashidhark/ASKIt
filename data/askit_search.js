@@ -8,12 +8,12 @@
 |===============================================================================
 */
 
-//$ = jQuery.noConflict(true);
+/*$ = jQuery.noConflict(true);
 
-/*(function ($) {
+(function ($) {
    $(document);
-}(jQuery));*/
-
+}(jQuery));
+*/
 var speaker        	= '';	var loading			= '';	var askit_logo		= '';	var askit_logo_icon	= '';	var askit_close_btn	= '';	var selection 		= '';
 var synonyms		= '';	var displayWord 	= '';	var timer1 			= 0 ;	var defineWord 		= '';	var timer2 			= 1 ;	var timer3			= 0 ;
 var errorTimer 		= 0;	var refresh 		= false;var selectionText 	= '';	var arrowTopCoo  	= 0;	var arrowLeftCoo  	= 0;	var arrowRightCoo  	= 0;

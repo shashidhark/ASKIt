@@ -350,6 +350,10 @@ $(document).ready(function(){
 	$('#version').click(function() {
 		$('#details').css({"background-color":"#F6F2D4", "padding":"10px", "border":"1px solid #CCC"});
 		$('#details').html('<div>\
+							<b>ASKIt 0.3.6</b>\
+								<ol class="noType">\
+									<li><span class="label label-warning">FIXED</span> Many bug Fixes </li>\
+                            	</ol>\
 							<b>ASKIt 0.3.5</b>\
 								<ol class="noType">\
 									<li><span class="label label-info">CHANGED</span> UI Improvement for ASKIt Panel and ASKIt Bubble. </ </li>\
