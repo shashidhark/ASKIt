@@ -352,7 +352,7 @@ $(document).ready(function(){
 		$('#details').html('<div>\
 							<b>ASKIt 0.3.6</b>\
 								<ol class="noType">\
-									<li><span class="label label-warning">FIXED</span> Many bug Fixes </li>\
+									<li><span class="label label-warning">FIXED</span> Minor bug Fixes </li>\
                             	</ol>\
 							<b>ASKIt 0.3.5</b>\
 								<ol class="noType">\
