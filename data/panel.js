@@ -363,6 +363,10 @@ $(document).ready(function(){
 	$('#version').click(function() {
 		$('#details').css({"background-color":"#F6F2D4", "padding":"10px", "border":"1px solid #CCC"});
 		$('#details').html('<div>\
+							<b>ASKIt 0.4</b>\
+								<ol class="noType">\
+									<li><span class="label label-success">NEW</span> Now ASKIt supports Math operations like +, -, * and /. </li>\
+                            	</ol>\
 							<b>ASKIt 0.3.6</b>\
 								<ol class="noType">\
 									<li><span class="label label-warning">FIXED</span> Minor bug Fixes </li>\

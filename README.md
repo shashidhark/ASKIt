@@ -23,6 +23,10 @@ How to use ASKIt?
 ------------------------------------------------------------------------------------------------------------------------------------
 Features
 ========
+ASKIt 0.4
+-----------
+	*NEW* Now ASKIt supports Math operations like +, -, * and /.
+	
 ASKIt 0.3.6
 -----------
 	*FIXED* Minor bug fixes.
