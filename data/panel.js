@@ -218,19 +218,25 @@ function dispDef(){
 	var data = $("#data").val();
 	//$('#setting').hide();
 	//$('#about').hide();	
-	$('#definition').show();
-	if(data.length==0){
-		$('#definition').css("border","0px solid #CCC");
-		$('#definition').html("<div class=\"alert\"><strong>Warning!</strong> Please enter a word</div>");
+	var res = data.match(/^[0-9][0-9+-/\*]*[0-9]$/g);
+	if(res){
+		$('#definition').html(data+" = "+math.eval(data));
 	}
 	else{
-		$('#definition').css("border","0px solid #CCC");
-		$('#definition').css("background-color","#F8ECC2");
-		$('#definition').html('<i style="color:blue" class="fa fa-circle-o-notch fa-spin fa-2x"></i>');
-		////console.log("hi");
-		d=true;
-		//console.log("Emit find def..");
-		self.port.emit("findDefn", [data, 0]);
+		$('#definition').show();
+		if(data.length==0){
+			$('#definition').css("border","0px solid #CCC");
+			$('#definition').html("<div class=\"alert\"><strong>Warning!</strong> Please enter a word</div>");
+		}
+		else{
+			$('#definition').css("border","0px solid #CCC");
+			$('#definition').css("background-color","#F8ECC2");
+			$('#definition').html('<i style="color:blue" class="fa fa-circle-o-notch fa-spin fa-2x"></i>');
+			////console.log("hi");
+			d=true;
+			//console.log("Emit find def..");
+			self.port.emit("findDefn", [data, 0]);
+		}
 	}
 }
 
@@ -289,7 +295,14 @@ self.port.on("takeSelectionFromTab", function(text){
 		$('#setting').hide();
 		$('#about').hide();
 		$('#definition').css("border","0px solid #CCC");
-		$('#definition').html('<i class="tipDetail"><u class="tip">Tip:</u> Select any word from webpage and click ASKIt add-on icon on toolbar to view the meaning.</i>');
+		$('#definition').html('<i class="tipDetail"><u class="tip">Tip:</u> Select any word from webpage and click ASKIt add-on icon on toolbar to view the meaning.'+
+			'<br /><br /> <font style="background-color:green; color:#FFF;">NEW&nbsp;</font> ASKIt suports math operations like +, -, * and / <br />'+
+			'Try a+b <br />'+
+			'a-b <br />'+
+			'a*b <br />'+
+			'a/b <br />'+
+			'a+b/c etc.</i>'
+		);
 		$('#def').show();
 	}
 });
